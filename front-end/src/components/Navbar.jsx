@@ -68,7 +68,7 @@ function Navbar() {
               px: 3,
             }}
           >
-            Login
+            <Link to="/login">Login</Link>
           </Button>
         </Box>
       </Toolbar>
