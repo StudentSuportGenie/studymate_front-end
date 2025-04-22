@@ -1,23 +1,82 @@
 import React from "react";
-import { Link } from "react-router-dom"; // ✅ This is the correct Link
-import "./Navbar.css";
+import { Link } from "react-router-dom";
+import {
+  AppBar,
+  Toolbar,
+  Typography,
+  Button,
+  Box,
+  Stack,
+} from "@mui/material";
 
 function Navbar() {
   return (
-    <nav className="navbar">
-      <div className="navbar-logo">📚 AI Study</div>
+    <AppBar position="static" color="primary" sx={{ px: 2 }}>
+      <Toolbar>
+        {/* Logo / Brand */}
+        <Typography
+          variant="h6"
+          component={Link}
+          to="/"
+          sx={{
+            flexGrow: 1,
+            textDecoration: "none",
+            color: "white",
+            fontWeight: "bold",
+          }}
+        >
+          📚 AI Study
+        </Typography>
 
-      <ul className="navbar-links">
-        <li><Link to="/">Home</Link></li>
-        <li><Link to="/about">About Us</Link></li>
-        <li><Link to="/contact">Contact Us</Link></li>
-      </ul>
+        {/* Navigation Links */}
+        <Stack direction="row" spacing={2}>
+          <Button
+            component={Link}
+            to="/"
+            color="inherit"
+            sx={{ textTransform: "none" }}
+          >
+            Home
+          </Button>
+          <Button
+            component={Link}
+            to="/about"
+            color="inherit"
+            sx={{ textTransform: "none" }}
+          >
+            About Us
+          </Button>
+          <Button
+            component={Link}
+            to="/contact"
+            color="inherit"
+            sx={{ textTransform: "none" }}
+          >
+            Contact Us
+          </Button>
+        </Stack>
 
-      <button className="login-button">Login</button>
-    </nav>
+        {/* Login Button */}
+        <Box ml={3}>
+          <Button
+            variant="contained"
+            color="secondary"
+            sx={{
+              textTransform: "none",
+              fontWeight: "bold",
+              borderRadius: "20px",
+              px: 3,
+            }}
+          >
+            Login
+          </Button>
+        </Box>
+      </Toolbar>
+    </AppBar>
   );
 }
 
 export default Navbar;
+
 
 
