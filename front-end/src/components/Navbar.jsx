@@ -54,6 +54,14 @@ function Navbar() {
           >
             Contact Us
           </Button>
+          <Button 
+             component={Link}
+             to="/Loginbutton"
+             color="inherit"
+             sx={{ textTransform: "none" }}
+          >
+          LoginwithAZure
+          </Button>
         </Stack>
 
         {/* Login Button */}
@@ -70,6 +78,7 @@ function Navbar() {
           >
             <Link to="/login">Login</Link>
           </Button>
+
         </Box>
       </Toolbar>
     </AppBar>

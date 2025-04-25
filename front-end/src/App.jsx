@@ -8,6 +8,7 @@ import Contact from "./pages/Contact";
 import Login from "./pages/Login";
 import Signup from "./pages/Signup";
 import Dashboard from "./pages/Dashboard";
+import Loginbutton from "./pages/loginbutton";
 
 
 function App() {
@@ -22,6 +23,7 @@ function App() {
         <Route path="/login" element={<Login/>}/>
         <Route path="/signup" element={<Signup/>}/>
         <Route path="/dashboard" element={<Dashboard/>}/>
+        <Route path="/Loginbutton" element={<Loginbutton/>}/>
       </Routes>
       
       <Footer />
