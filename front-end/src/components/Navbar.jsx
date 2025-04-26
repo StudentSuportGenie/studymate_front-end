@@ -54,6 +54,14 @@ function Navbar() {
           >
             Contact Us
           </Button>
+          <Button
+            component={Link}
+            to="/loginbutton"
+            color="inherit"
+            sx={{ textTransform: "none" }}
+          >
+            Okta Login
+          </Button>
         </Stack>
 
         {/* Login Button */}
