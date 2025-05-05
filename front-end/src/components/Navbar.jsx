@@ -8,8 +8,18 @@ import {
   Box,
   Stack,
 } from "@mui/material";
+import { useMsal } from "@azure/msal-react";
+import { loginRequest } from "../authConfig.jsx";
 
 function Navbar() {
+
+  const { instance } = useMsal();
+  
+    const handleLogin = () => {
+      instance.loginRedirect(loginRequest);
+    };
+
+
   return (
     <AppBar position="static" color="primary" sx={{ px: 2 }}>
       <Toolbar>
@@ -59,6 +69,7 @@ function Navbar() {
         {/* Login Button */}
         <Box ml={3}>
           <Button
+            onClick={handleLogin}
             variant="contained"
             color="secondary"
             sx={{
@@ -68,7 +79,7 @@ function Navbar() {
               px: 3,
             }}
           >
-            <Link to="/login">Login</Link>
+            Login
           </Button>
         </Box>
       </Toolbar>

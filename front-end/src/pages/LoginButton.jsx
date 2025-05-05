@@ -1,4 +1,3 @@
-// src/components/LoginButton.jsx
 import React from "react";
 import { useMsal } from "@azure/msal-react";
 import { loginRequest } from "../authConfig";
@@ -10,10 +9,22 @@ function LoginButton() {
     instance.loginRedirect(loginRequest);
   };
 
+  const logoutFun = () => {
+    instance.logoutRedirect({
+      postLogoutRedirectUri: "http://localhost:5173", 
+    });
+    localStorage.clear(); 
+  };
+
   return (
+    <>
     <button onClick={handleLogin} style={{ padding: '10px 20px', fontSize: '16px' }}>
       Sign in with Azure AD B2C
     </button>
+    <button onClick={logoutFun}>
+       Logout
+    </button>
+    </>
   );
 }
 

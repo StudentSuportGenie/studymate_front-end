@@ -5,10 +5,10 @@ export const msalConfig = {
       authority: "https://studtSupportdemo.b2clogin.com/studtSupportdemo.onmicrosoft.com/B2C_1_study", 
       knownAuthorities: ["studtSupportdemo.b2clogin.com"], 
       redirectUri: "http://localhost:5173/",
-      postLogoutRedirectUri: "http://localhost:5173",
+      postLogoutRedirectUri: "http://localhost:5173/",
     },
     cache: {
-      cacheLocation: "localstorage",
+      cacheLocation: "localStorage", 
       storeAuthStateInCookie: false,
     },
   };
