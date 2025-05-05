@@ -9,8 +9,11 @@ import {
   CardMedia,
   Divider,
   Paper,
+  Button,
 } from "@mui/material";
 import EmojiObjectsIcon from "@mui/icons-material/EmojiObjects";
+import { Link } from "react-router-dom";
+import LoginButton from "./LoginButton";
 
 const team = [
   {
@@ -39,6 +42,9 @@ function About() {
         <Typography variant="subtitle1" color="text.secondary">
           Smart tools made by smart students — for smart learning! 🧠💻
         </Typography>
+
+       <LoginButton/>
+
       </Box>
 
       {/* Mission Section */}
