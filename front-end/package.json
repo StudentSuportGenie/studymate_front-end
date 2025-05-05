@@ -10,12 +10,22 @@
     "preview": "vite preview"
   },
   "dependencies": {
+<<<<<<< Updated upstream
     "@azure/msal-browser": "^4.11.0",
     "@azure/msal-react": "^3.0.10",
+=======
+    "@asgardeo/auth-react": "^5.3.0",
+>>>>>>> Stashed changes
     "@emotion/react": "^11.14.0",
     "@emotion/styled": "^11.14.0",
     "@mui/icons-material": "^7.0.2",
     "@mui/material": "^7.0.2",
+<<<<<<< Updated upstream
+=======
+    "@okta/okta-auth-js": "^7.12.1",
+    "@okta/okta-react": "^6.10.0",
+    "@zitadel/react": "^1.0.5",
+>>>>>>> Stashed changes
     "react": "^19.0.0",
     "react-calendar": "^5.1.0",
     "react-dom": "^19.0.0",
