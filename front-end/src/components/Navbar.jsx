@@ -1,24 +1,42 @@
 import React from "react";
 import { Link } from "react-router-dom";
-import {
-  AppBar,
-  Toolbar,
-  Typography,
-  Button,
-  Box,
-  Stack,
-} from "@mui/material";
+import { AppBar, Toolbar, Typography, Button, Box, Stack } from "@mui/material";
 import { useMsal } from "@azure/msal-react";
 import { loginRequest } from "../authConfig.jsx";
+import { jwtDecode } from "jwt-decode";
+import { useNavigate } from "react-router-dom";
 
 function Navbar() {
+  const { instance, accounts } = useMsal();
+  const navigate = useNavigate();
 
-  const { instance } = useMsal();
-  
-    const handleLogin = () => {
-      instance.loginRedirect(loginRequest);
-    };
+  const handleLogin = () => {
+    instance.loginRedirect(loginRequest);
+  };
 
+  React.useEffect(() => {
+    if (accounts.length > 0) {
+      instance
+        .acquireTokenSilent({
+          ...loginRequest,
+          account: accounts[0],
+        })
+        .then((response) => {
+          sessionStorage.setItem("studyBuddy", response.idToken);
+
+          const decode = jwtDecode(response.idToken);
+          const Role = decode.jobTitle;
+
+          console.log(Role);
+
+          if (Role === "Student") {
+            navigate("/StudentHome");
+          } else {
+            navigate("/");
+          }
+        });
+    }
+  }, [accounts, instance]);
 
   return (
     <AppBar position="static" color="primary" sx={{ px: 2 }}>
@@ -88,6 +106,3 @@ function Navbar() {
 }
 
 export default Navbar;
-
-
-

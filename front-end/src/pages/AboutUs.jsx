@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import {
   Container,
   Typography,
@@ -14,6 +14,7 @@ import {
 import EmojiObjectsIcon from "@mui/icons-material/EmojiObjects";
 import { Link } from "react-router-dom";
 import LoginButton from "./LoginButton";
+import { useNavigate } from "react-router-dom";
 
 const team = [
   {
@@ -31,6 +32,17 @@ const team = [
 ];
 
 function About() {
+  const navigate = useNavigate();
+
+  useEffect(()=>{
+   const token = sessionStorage.getItem("studyBuddy");
+   console.log("Session token:"+ token);
+  },[])
+
+  const navigatetopage = () => {
+    navigate("/ProfieSettings");
+  };
+  
   return (
     <Container maxWidth="md" sx={{ py: 6 }}>
       {/* Heading */}
@@ -89,6 +101,10 @@ function About() {
       <Typography variant="h5" align="center" gutterBottom>
         👨‍💻 Meet the Founders
       </Typography>
+
+      <Button onClick={navigatetopage}>
+        Profile
+      </Button>
 
       <Grid container spacing={4} justifyContent="center" mt={2}>
         {team.map((member, index) => (

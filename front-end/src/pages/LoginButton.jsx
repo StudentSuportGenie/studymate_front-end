@@ -13,7 +13,7 @@ function LoginButton() {
     instance.logoutRedirect({
       postLogoutRedirectUri: "http://localhost:5173", 
     });
-    localStorage.clear(); 
+    sessionStorage.clear(); 
   };
 
   return (
