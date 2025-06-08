@@ -31,6 +31,8 @@ function Navbar() {
 
           if (Role === "Student") {
             navigate("/StudentHome");
+          } else if (Role === "Admin") {
+            navigate("/AdminHome");
           } else {
             navigate("/");
           }

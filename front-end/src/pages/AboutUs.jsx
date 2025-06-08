@@ -34,15 +34,14 @@ const team = [
 function About() {
   const navigate = useNavigate();
 
-  useEffect(()=>{
-   const token = sessionStorage.getItem("studyBuddy");
-   console.log("Session token:"+ token);
-  },[])
+  useEffect(() => {
+    const token = sessionStorage.getItem("studyBuddy");
+  }, []);
 
   const navigatetopage = () => {
     navigate("/ProfieSettings");
   };
-  
+
   return (
     <Container maxWidth="md" sx={{ py: 6 }}>
       {/* Heading */}
@@ -55,8 +54,7 @@ function About() {
           Smart tools made by smart students — for smart learning! 🧠💻
         </Typography>
 
-       <LoginButton/>
-
+        {/* <LoginButton /> */}
       </Box>
 
       {/* Mission Section */}
@@ -73,24 +71,24 @@ function About() {
           🎯 Our Mission
         </Typography>
         <Typography variant="body1" color="text.secondary" paragraph>
-          At AI StudyMate, our mission is to revolutionize the way students learn,
-          plan, and grow academically. 📚✨ We believe that with the right tools,
-          every student can study smarter, not harder.
+          At AI StudyMate, our mission is to revolutionize the way students
+          learn, plan, and grow academically. 📚✨ We believe that with the
+          right tools, every student can study smarter, not harder.
         </Typography>
         <Typography variant="body1" color="text.secondary" paragraph>
           We aim to build a digital companion that feels like a friend — one who
-          keeps your calendar on track 🗓️, helps you focus better 🎯, and gives you
-          helpful nudges so you can reach your goals stress-free 💆‍♀️.
+          keeps your calendar on track 🗓️, helps you focus better 🎯, and gives
+          you helpful nudges so you can reach your goals stress-free 💆‍♀️.
         </Typography>
         <Typography variant="body1" color="text.secondary" paragraph>
           Our platform combines simplicity with smartness using AI and
-          human-centered design. We’re not just building features — we’re building
-          better student lives 🧠💡.
+          human-centered design. We’re not just building features — we’re
+          building better student lives 🧠💡.
         </Typography>
         <Typography variant="body1" color="text.secondary">
-          We’re here to empower learners like you, who dream big, hustle hard, and
-          need a study buddy that actually understands 💪❤️. Together, let’s make
-          study time productive, organized, and even a little bit fun! 🚀🎉
+          We’re here to empower learners like you, who dream big, hustle hard,
+          and need a study buddy that actually understands 💪❤️. Together, let’s
+          make study time productive, organized, and even a little bit fun! 🚀🎉
         </Typography>
       </Paper>
 
@@ -102,9 +100,7 @@ function About() {
         👨‍💻 Meet the Founders
       </Typography>
 
-      <Button onClick={navigatetopage}>
-        Profile
-      </Button>
+      <Button onClick={navigatetopage}>Profile</Button>
 
       <Grid container spacing={4} justifyContent="center" mt={2}>
         {team.map((member, index) => (
