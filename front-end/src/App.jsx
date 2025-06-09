@@ -18,6 +18,7 @@ import ViewAllStudents from "./pages/AdminComponenet/ViewAllStudents";
 import LogoutFunction from "./components/LogoutFunction";
 import StudentSidetab from "./components/StudentSidetab";
 import TimeScheduleAdded from "./pages/StudentComponent/TimeScheduleAdded";
+import ViewAddedSchedule from "./pages/StudentComponent/ViewAddedSchedule";
 
 function App() {
   return (
@@ -41,6 +42,7 @@ function App() {
         <Route path="/LogoutFunction" element={<LogoutFunction />} />
         <Route path="/StudentSidetab" element={<StudentSidetab />} />
         <Route path="/TimeScheduleAdded" element={<TimeScheduleAdded />} />
+        <Route path="/ViewAddedSchedule" element={<ViewAddedSchedule />} />
       </Routes>
 
       <Footer />

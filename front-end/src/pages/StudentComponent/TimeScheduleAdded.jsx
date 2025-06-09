@@ -1,50 +1,105 @@
-import React, { useState } from 'react';
-import StudentSidetab from '../../components/StudentSidetab';
+import React, { useEffect, useState } from "react";
+import StudentSidetab from "../../components/StudentSidetab";
+import API from "../../Context/Axiox";
+import { Box, Button, TextField } from "@mui/material";
+import ViewAddedSchedule from "./ViewAddedSchedule";
 
 function TimeScheduleAdded() {
-  const [selectedDate, setSelectedDate] = useState('');
-  const [schedule, setSchedule] = useState(Array(24).fill(false));
+  const [studentDetails, setStudentDetails] = useState("");
+  const [date, setDate] = useState("");
+  const [startTime, setStartTime] = useState("");
+  const [contentTopic, setContentTopic] = useState("");
+  const [hourCount, setHourCount] = useState("");
 
-  const handleTimeChange = (index) => {
-    const updatedSchedule = [...schedule];
-    updatedSchedule[index] = !updatedSchedule[index];
-    setSchedule(updatedSchedule);
+  useEffect(() => {
+    fetchStudentData();
+  }, []);
+
+  const fetchStudentData = async () => {
+    try {
+      const response = await API.get("studentDetailUni");
+      setStudentDetails(response.data);
+      console.log(response.data);
+    } catch (error) {
+      console.error("Failed to fetch student data:", error);
+    }
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+
+    const formattedTime =
+      startTime.length === 5 ? `${startTime}:00` : startTime;
+
+    try {
+      const response = await API.post("RadScheduler", {
+        scheduleDate: date,
+        scheduleStartTime: formattedTime,
+        hourCount: hourCount,
+        scheduleTopic: contentTopic,
+        studentDetailsId: studentDetails.studentDetailsId,
+      });
+      alert("Schedule added successfully!");
+    } catch (error) {
+      if (error.response) {
+        console.error("Error response:", error.response);
+        alert(
+          `Error ${error.response.status}: ${
+            error.response.data.message || "An error occurred"
+          }`
+        );
+      } else {
+        console.error("Error:", error.message);
+        alert("An unexpected error occurred.");
+      }
+    }
   };
 
   return (
     <>
       <StudentSidetab />
-      <div style={{ padding: '20px' }}>
-        <h2>Select Date and Time Schedule (24 Hours)</h2>
-
-        <label>
-          Date:
-          <input
+      <Box sx={{ maxWidth: 500, mx: "auto", mt: 4 }}>
+        <form onSubmit={handleSubmit}>
+          <TextField
             type="date"
-            value={selectedDate}
-            onChange={(e) => setSelectedDate(e.target.value)}
-            style={{ marginLeft: '10px' }}
+            fullWidth
+            margin="normal"
+            value={date}
+            onChange={(e) => setDate(e.target.value)}
+            label="Date"
           />
-        </label>
-
-        <div style={{ marginTop: '20px' }}>
-          <h3>Time Slots</h3>
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '10px' }}>
-            {Array.from({ length: 24 }).map((_, i) => (
-              <label key={i} style={{ display: 'flex', alignItems: 'center' }}>
-                <input
-                  type="checkbox"
-                  checked={schedule[i]}
-                  onChange={() => handleTimeChange(i)}
-                />
-                <span style={{ marginLeft: '8px' }}>
-                  {i.toString().padStart(2, '0')}:00 - {((i + 1) % 24).toString().padStart(2, '0')}:00
-                </span>
-              </label>
-            ))}
-          </div>
-        </div>
-      </div>
+          <TextField
+            type="time"
+            fullWidth
+            margin="normal"
+            value={startTime}
+            onChange={(e) => setStartTime(e.target.value)}
+            label="Start Time"
+          />
+          <TextField
+            fullWidth
+            margin="normal"
+            type="text"
+            value={contentTopic}
+            label="Content Topic"
+            onChange={(e) => setContentTopic(e.target.value)}
+          />
+          <TextField
+            fullWidth
+            margin="normal"
+            type="number"
+            value={hourCount}
+            label="Hour Count"
+            onChange={(e) => setHourCount(e.target.value)}
+          />
+          <Button type="submit" variant="contained" sx={{ mt: 2 }}>
+            Submit
+          </Button>
+        </form>
+      </Box>
+      <Box>
+        <ViewAddedSchedule />
+      </Box>
     </>
   );
 }

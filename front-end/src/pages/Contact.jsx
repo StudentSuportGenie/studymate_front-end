@@ -24,10 +24,10 @@ function Contact() {
 
     emailjs
       .sendForm(
-        "service_l2dp9oo",        // Your EmailJS service ID
-        "template_nymrduf",       // Your EmailJS template ID
+        "service_l2dp9oo",        
+        "template_nymrduf",      
         formRef.current,
-        "0rTCCPd3w0dUM2d7d"       // Your EmailJS public key
+        "0rTCCPd3w0dUM2d7d"       
       )
       .then(
         (result) => {
