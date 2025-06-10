@@ -10,6 +10,8 @@ function StudentSidetab() {
           {" "}
           <Link to="/StudentHome"> DashBord</Link> {">"}{" "}
           <Link to="/TimeScheduleAdded">TimeSchedule</Link> {">"}{" "}
+          <Link to="/DateReminder">DateReminder</Link>
+          {">"}{" "}
         </Typography>
       </Box>
     </>

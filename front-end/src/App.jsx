@@ -19,6 +19,8 @@ import LogoutFunction from "./components/LogoutFunction";
 import StudentSidetab from "./components/StudentSidetab";
 import TimeScheduleAdded from "./pages/StudentComponent/TimeScheduleAdded";
 import ViewAddedSchedule from "./pages/StudentComponent/ViewAddedSchedule";
+import DateReminder from "./pages/StudentComponent/DateReminder";
+import ViewAddedDatereminder from "./pages/StudentComponent/ViewAddedDatereminder";
 
 function App() {
   return (
@@ -43,6 +45,11 @@ function App() {
         <Route path="/StudentSidetab" element={<StudentSidetab />} />
         <Route path="/TimeScheduleAdded" element={<TimeScheduleAdded />} />
         <Route path="/ViewAddedSchedule" element={<ViewAddedSchedule />} />
+        <Route path="/DateReminder" element={<DateReminder />} />
+        <Route
+          path="/ViewAddedDatereminder"
+          element={<ViewAddedDatereminder />}
+        />
       </Routes>
 
       <Footer />
