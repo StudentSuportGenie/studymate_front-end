@@ -20,12 +20,12 @@
 
 // export default API;
 
-// // --legacy-peer-deps
+// --legacy-peer-deps
 
 import axios from "axios";
 
 const API = axios.create({
-  baseURL: "http://localhost:8080/API/V1/",
+  baseURL: "http://localhost:8089/API/V1/",
   headers: {
     "Content-Type": "application/json",
     Accept: "application/json",
