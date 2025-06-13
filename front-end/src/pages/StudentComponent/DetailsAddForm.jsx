@@ -79,13 +79,17 @@ function DetailsAddForm() {
 
       alert("Details added successfully");
       window.location.reload();
-    } catch (error) {
+    }catch (error) {
       if (error.response) {
-        console.error("Server error:", error.response.data);
-      } else if (error.request) {
-        console.error("No response from server.");
+        console.error("Error response:", error.response);
+        alert(
+          `${
+            error.response.data.message
+          }`
+        );
       } else {
         console.error("Error:", error.message);
+        alert("An unexpected error occurred.");
       }
     }
   };

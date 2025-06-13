@@ -19,7 +19,6 @@ function TimeScheduleAdded() {
     try {
       const response = await API.get("studentDetailUni");
       setStudentDetails(response.data);
-      console.log(response.data);
     } catch (error) {
       console.error("Failed to fetch student data:", error);
     }
@@ -40,12 +39,13 @@ function TimeScheduleAdded() {
         studentDetailsId: studentDetails.studentDetailsId,
       });
       alert("Schedule added successfully!");
+      window.location.reload();
     } catch (error) {
       if (error.response) {
         console.error("Error response:", error.response);
         alert(
-          `Error ${error.response.status}: ${
-            error.response.data.message || "An error occurred"
+          `${
+            error.response.data.message
           }`
         );
       } else {
@@ -67,6 +67,7 @@ function TimeScheduleAdded() {
             value={date}
             onChange={(e) => setDate(e.target.value)}
             label="Date"
+            required
           />
           <TextField
             type="time"
@@ -75,6 +76,7 @@ function TimeScheduleAdded() {
             value={startTime}
             onChange={(e) => setStartTime(e.target.value)}
             label="Start Time"
+            required
           />
           <TextField
             fullWidth
@@ -83,6 +85,7 @@ function TimeScheduleAdded() {
             value={contentTopic}
             label="Content Topic"
             onChange={(e) => setContentTopic(e.target.value)}
+            required
           />
           <TextField
             fullWidth
@@ -91,6 +94,7 @@ function TimeScheduleAdded() {
             value={hourCount}
             label="Hour Count"
             onChange={(e) => setHourCount(e.target.value)}
+            required
           />
           <Button type="submit" variant="contained" sx={{ mt: 2 }}>
             Submit

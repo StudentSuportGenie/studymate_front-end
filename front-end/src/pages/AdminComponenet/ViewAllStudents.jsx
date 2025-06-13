@@ -1,5 +1,5 @@
 import {
-    Button,
+  Button,
   Table,
   TableBody,
   TableCell,
@@ -28,19 +28,38 @@ function ViewAllStudents() {
     }
   };
 
-  const  handeldelete =async(studentDetailsId)=>{
-   try{
-   const respond = await API.delete(`deletestudent?studentId=${studentDetailsId}`);
-   alert("Delete Succesfully");
-   window.location.reload();
-   }catch(error){
-    console.log(error);
-   }
+  const handeldelete = async (studentDetailsId) => {
+    try {
+      const respond = await API.delete(
+        `deletestudent?studentId=${studentDetailsId}`
+      );
+      alert("Delete Succesfully");
+      window.location.reload();
+    } catch (error) {
+      if (error.response) {
+        console.error("Error response:", error.response);
+        alert(`${error.response.data.message}`);
+      } else {
+        console.error("Error:", error.message);
+        alert("An unexpected error occurred.");
+      }
+    }
+  };
+
+  const deleteConformation = (studentDetailsId) => {
+    const confirmDelete = window.confirm(
+      "Are you sure you want to delete this post?"
+    );
+    if(confirmDelete){
+      handeldelete(studentDetailsId)
+    }
   };
 
   return (
     <>
-    <Typography align="center" variant="h4">Students details</Typography>
+      <Typography align="center" variant="h4">
+        Students details
+      </Typography>
       <TableContainer>
         <Table>
           <TableHead>
@@ -67,9 +86,14 @@ function ViewAllStudents() {
                 <TableCell>
                   {new Date(studetails.studentBirthday).toLocaleDateString()}
                 </TableCell>
-                <TableCell><Button variant="contained" onClick={()=> handeldelete(studetails.studentDetailsId)}>
+                <TableCell>
+                  <Button
+                    variant="contained"
+                    onClick={() => deleteConformation(studetails.studentDetailsId)}
+                  >
                     Delete
-                    </Button></TableCell>
+                  </Button>
+                </TableCell>
               </TableRow>
             ))}
           </TableBody>

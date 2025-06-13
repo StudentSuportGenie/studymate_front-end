@@ -68,10 +68,27 @@ function ViewAddedSchedule() {
       await API.delete(`deleteDetails?scheduleId=${id}`);
       alert("Deleted successfully");
       fetchscheduledata();
-    } catch (error) {
-      console.log(error);
+    }catch (error) {
+      if (error.response) {
+        console.error("Error response:", error.response);
+        alert(
+          `${
+            error.response.data.message
+          }`
+        );
+      } else {
+        console.error("Error:", error.message);
+        alert("An unexpected error occurred.");
+      }
     }
   };
+
+  const deleteConformation = (id) => {
+    const conformation = window.confirm("Are you sure you wanto delete this Schedule ?");
+    if(conformation) {
+      handleDelete(id);
+    }
+  }
 
   const calculateEndTime = (startTime, hourCount) => {
     const [hours, minutes] = startTime.split(":").map(Number);
@@ -162,7 +179,7 @@ function ViewAddedSchedule() {
                     )}
                   </TableCell>
                   <TableCell>
-                    <Button onClick={() => handleDelete(row.scheduleId)}>
+                    <Button onClick={() => deleteConformation(row.scheduleId)}>
                       Delete
                     </Button>
                   </TableCell>

@@ -39,7 +39,6 @@ function ViewAddedDatereminder() {
   }
 
   const handelDelete = async (dateReminderId) => {
-    console.log(dateReminderId);
     try {
       const respond = await API.delete(
         `deleteReminder?dateReminderId=${dateReminderId}`
@@ -47,7 +46,22 @@ function ViewAddedDatereminder() {
       alert("Delete Success fully");
       window.location.reload();
     } catch (error) {
-      console.log(error);
+      if (error.response) {
+        console.error("Error response:", error.response);
+        alert(`${error.response.data.message}`);
+      } else {
+        console.error("Error:", error.message);
+        alert("An unexpected error occurred.");
+      }
+    }
+  };
+
+  const deleteConformation = (dateReminderId) => {
+    const conformdelete = window.confirm(
+      "Are you sure you want to delete this Reminder ?"
+    );
+    if (conformdelete) {
+      handelDelete(dateReminderId);
     }
   };
 
@@ -78,7 +92,7 @@ function ViewAddedDatereminder() {
                   </TableCell>
                   <TableCell>
                     <Button
-                      onClick={() => handelDelete(reminder.dateReminderId)}
+                      onClick={() => deleteConformation(reminder.dateReminderId)}
                     >
                       Delete
                     </Button>

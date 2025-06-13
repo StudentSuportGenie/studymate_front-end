@@ -92,11 +92,21 @@ function DetailsEditForm({ studentdetails }) {
 
       alert("Details updated successfully");
       window.location.reload();
-    } catch (error) {
-      console.error("Update failed:", error);
-      alert("Failed to update details.");
+    }catch (error) {
+      if (error.response) {
+        console.error("Error response:", error.response);
+        alert(
+          `${
+            error.response.data.message
+          }`
+        );
+      } else {
+        console.error("Error:", error.message);
+        alert("An unexpected error occurred.");
+      }
     }
   };
+
 
   return (
     <>

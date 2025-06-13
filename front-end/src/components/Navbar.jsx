@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { Link } from "react-router-dom";
 import { AppBar, Toolbar, Typography, Button, Box, Stack } from "@mui/material";
 import { useMsal } from "@azure/msal-react";
@@ -14,7 +14,7 @@ function Navbar() {
     instance.loginRedirect(loginRequest);
   };
 
-  React.useEffect(() => {
+  useEffect(() => {
     if (accounts.length > 0) {
       instance
         .acquireTokenSilent({

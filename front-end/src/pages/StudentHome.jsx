@@ -51,7 +51,6 @@ function StudentHome() {
   return (
     <>
     <StudentSidetab/>
-    <LogoutFunction/>
       <Typography align="center" variant="h5" sx={{ mt: "20px" }}>
         Welcome, {name}
       </Typography>

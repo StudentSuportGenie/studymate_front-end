@@ -34,10 +34,21 @@ function DateReminder() {
         reminderTopic: reminderTopic,
         reminderDate: dateReminder,
       });
+      
       alert("Reminder Added success fully ");
       window.location.reload();
-    } catch (error) {
-      console.log(error);
+    }catch (error) {
+      if (error.response) {
+        console.error("Error response:", error.response);
+        alert(
+          `${
+            error.response.data.message
+          }`
+        );
+      } else {
+        console.error("Error:", error.message);
+        alert("An unexpected error occurred.");
+      }
     }
   };
 
