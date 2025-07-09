@@ -6,7 +6,8 @@ import { jwtDecode } from "jwt-decode";
 import { Typography, Box } from "@mui/material";
 import DetailsEditForm from "./StudentComponent/DetailsEditForm";
 import StudentSidetab from "../components/StudentSidetab";
-import LogoutFunction from "../components/LogoutFunction";
+
+
 
 function StudentHome() {
   const navigate = useNavigate();

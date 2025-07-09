@@ -8,6 +8,7 @@ import {
   MenuItem,
   Button,
   CircularProgress,
+  Box,
 } from "@mui/material";
 import API from "../../Context/Axiox";
 
@@ -92,14 +93,10 @@ function DetailsEditForm({ studentdetails }) {
 
       alert("Details updated successfully");
       window.location.reload();
-    }catch (error) {
+    } catch (error) {
       if (error.response) {
         console.error("Error response:", error.response);
-        alert(
-          `${
-            error.response.data.message
-          }`
-        );
+        alert(`${error.response.data.message}`);
       } else {
         console.error("Error:", error.message);
         alert("An unexpected error occurred.");
@@ -107,102 +104,128 @@ function DetailsEditForm({ studentdetails }) {
     }
   };
 
-
   return (
     <>
-      <Typography align="center" variant="h6" gutterBottom>
-        Details Edit Form
-      </Typography>
-      <form
-        onSubmit={handleSubmit}
-        style={{
-          display: "flex",
-          flexDirection: "column",
-          alignItems: "center",
+      <Box
+        sx={{
+          m: "80px",
         }}
       >
-        <TextField
-          label="Birthday"
-          type="date"
-          fullWidth
-          margin="normal"
-          value={editBirthday}
-          onChange={(e) => setEditBirthday(e.target.value)}
-        />
-
-        <FormControl fullWidth margin="normal">
-          <InputLabel id="GenderId">Gender</InputLabel>
-          <Select
-            labelId="GenderId"
-            value={editGender}
-            label="Gender"
-            onChange={handleGender}
+        <Typography align="center" variant="h6" gutterBottom>
+          Details Edit Form
+        </Typography>
+        <form
+          onSubmit={handleSubmit}
+          style={{
+            display: "flex",
+            flexDirection: "column",
+            alignItems: "center",
+          }}
+        >
+          <Box
+            sx={{
+              display: "flex",
+              flexDirection: "column",
+              alignItems: "flex-start",
+              padding: 2,
+            }}
           >
-            <MenuItem value="MALE">Male</MenuItem>
-            <MenuItem value="FEMALE">Female</MenuItem>
-          </Select>
-        </FormControl>
-
-        <input
-          type="file"
-          accept="image/*"
-          onChange={handleImageChange}
-          style={{ marginTop: "16px" }}
-        />
-
-        {(uploading || localPreview || profileEdit) && (
-          <div style={{ marginTop: "10px", marginBottom: "10px" }}>
-            {uploading ? (
-              <div
-                style={{
+            {(uploading || localPreview || profileEdit) && (
+              <Box
+                sx={{
                   display: "flex",
                   flexDirection: "column",
                   alignItems: "center",
                 }}
               >
-                <CircularProgress size={32} />
-                <Typography variant="body2">Uploading...</Typography>
-                {localPreview && (
-                  <img
-                    src={localPreview}
-                    alt="Local Preview"
-                    style={{
-                      width: "150px",
-                      height: "150px",
-                      borderRadius: "8px",
-                      objectFit: "cover",
-                      marginTop: "8px",
+                {uploading ? (
+                  <Box
+                    sx={{
+                      display: "flex",
+                      flexDirection: "column",
+                      alignItems: "center",
                     }}
-                  />
+                  >
+                    <CircularProgress size={32} />
+                    <Typography variant="body2" sx={{ mt: 1 }}>
+                      Uploading...
+                    </Typography>
+                    {localPreview && (
+                      <img
+                        src={localPreview}
+                        alt="Local Preview"
+                        style={{
+                          width: "120px",
+                          height: "120px",
+                          borderRadius: "50%",
+                          objectFit: "cover",
+                          marginTop: "8px",
+                          border: "2px solid black",
+                        }}
+                      />
+                    )}
+                  </Box>
+                ) : (
+                  profileEdit && (
+                    <img
+                      src={profileEdit}
+                      alt="Profile"
+                      style={{
+                        width: "120px",
+                        height: "120px",
+                        borderRadius: "50%",
+                        objectFit: "cover",
+                        marginBottom: "8px",
+                        
+                      }}
+                    />
+                  )
                 )}
-              </div>
-            ) : (
-              profileEdit && (
-                <img
-                  src={profileEdit}
-                  alt="Profile"
-                  style={{
-                    width: "150px",
-                    height: "150px",
-                    borderRadius: "8px",
-                    objectFit: "cover",
-                  }}
-                />
-              )
+              </Box>
             )}
-          </div>
-        )}
 
-        <Button
-          type="submit"
-          variant="contained"
-          fullWidth
-          sx={{ mt: 2 }}
-          disabled={uploading || !editBirthday || !editGender || !profileEdit}
-        >
-          {uploading ? "Uploading..." : "Submit"}
-        </Button>
-      </form>
+            <input
+              type="file"
+              accept="image/*"
+              
+              onChange={handleImageChange}
+              style={{ marginTop: "12px" }}
+            />
+          </Box>
+
+          <TextField
+            label="Birthday"
+            type="date"
+            fullWidth
+            margin="normal"
+            value={editBirthday}
+            onChange={(e) => setEditBirthday(e.target.value)}
+          />
+
+          <FormControl fullWidth margin="normal">
+            <InputLabel id="GenderId">Gender</InputLabel>
+            <Select
+              labelId="GenderId"
+              value={editGender}
+              label="Gender"
+              onChange={handleGender}
+            >
+              <MenuItem value="MALE">Male</MenuItem>
+              <MenuItem value="FEMALE">Female</MenuItem>
+            </Select>
+          </FormControl>
+
+          <Button
+            type="submit"
+            variant="contained"
+            fullWidth
+            sx={{ mt: 2 }}
+            disabled={uploading || !editBirthday || !editGender || !profileEdit}
+          >
+            {uploading ? "Uploading..." : "Submit"}
+          </Button>
+        </form>
+      </Box>
     </>
   );
 }

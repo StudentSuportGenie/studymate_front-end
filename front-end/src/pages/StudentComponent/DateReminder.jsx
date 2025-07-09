@@ -1,4 +1,4 @@
-import { Box, Button, TextField } from "@mui/material";
+import { Box, Button, TextField, Typography } from "@mui/material";
 import React, { useEffect, useState } from "react";
 import API from "../../Context/Axiox";
 import StudentSidetab from "../../components/StudentSidetab";
@@ -34,17 +34,13 @@ function DateReminder() {
         reminderTopic: reminderTopic,
         reminderDate: dateReminder,
       });
-      
+
       alert("Reminder Added success fully ");
       window.location.reload();
-    }catch (error) {
+    } catch (error) {
       if (error.response) {
         console.error("Error response:", error.response);
-        alert(
-          `${
-            error.response.data.message
-          }`
-        );
+        alert(`${error.response.data.message}`);
       } else {
         console.error("Error:", error.message);
         alert("An unexpected error occurred.");
@@ -55,7 +51,13 @@ function DateReminder() {
   return (
     <>
       <StudentSidetab />
-      <Box>
+      <Box sx={{
+        mt:'20px'
+        
+      }}>
+        <Typography textAlign="center" variant="h5">
+          Add Your Reminder
+        </Typography>
         <form onSubmit={handelSubmit}>
           <TextField
             label="Date"
@@ -81,7 +83,15 @@ function DateReminder() {
             value={reminderTopic}
             onChange={(e) => setreminderTopic(e.target.value)}
           />
-          <Button type="submit">Submit</Button>
+          <Button
+            type="submit"
+            sx={{
+              bgcolor: "green",
+              color: "white",
+            }}
+          >
+            Submit
+          </Button>
         </form>
       </Box>
       <ViewAddedDatereminder />

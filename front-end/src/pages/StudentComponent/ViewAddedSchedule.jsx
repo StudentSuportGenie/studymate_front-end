@@ -100,7 +100,10 @@ function ViewAddedSchedule() {
   const formatDate = (isoDate) => new Date(isoDate).toISOString().split("T")[0];
 
   return (
-    <Box>
+    <Box sx={{
+      mt:4,
+      mb:5,
+    }}>
       <TableContainer>
         <Table>
           <TableHead>
@@ -179,7 +182,11 @@ function ViewAddedSchedule() {
                     )}
                   </TableCell>
                   <TableCell>
-                    <Button onClick={() => deleteConformation(row.scheduleId)}>
+                    <Button onClick={() => deleteConformation(row.scheduleId)} sx={{
+                      bgcolor:"red",
+                      color:"white"
+                      
+                    }}>
                       Delete
                     </Button>
                   </TableCell>

@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import StudentSidetab from "../../components/StudentSidetab";
 import API from "../../Context/Axiox";
-import { Box, Button, TextField } from "@mui/material";
+import { Box, Button, TextField, Typography } from "@mui/material";
 import ViewAddedSchedule from "./ViewAddedSchedule";
 
 function TimeScheduleAdded() {
@@ -58,7 +58,10 @@ function TimeScheduleAdded() {
   return (
     <>
       <StudentSidetab />
-      <Box sx={{ maxWidth: 500, mx: "auto", mt: 4 }}>
+      <Box sx={{ maxWidth: 500, mx: "auto", mt: 4 , mb:5}}>
+        <Typography textAlign="center" variant="h5">
+          Add your Schedule
+        </Typography>
         <form onSubmit={handleSubmit}>
           <TextField
             type="date"

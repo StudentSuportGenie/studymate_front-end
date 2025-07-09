@@ -21,10 +21,15 @@
     "@mui/material": "^7.0.2",
     "axios": "^1.9.0",
     "jwt-decode": "^4.0.0",
+    "pdf-parse": "^1.1.1",
+    "pdfjs-dist": "^5.3.93",
     "react": "^19.0.0",
     "react-calendar": "^5.1.0",
     "react-dom": "^19.0.0",
-    "react-router-dom": "^7.5.1"
+    "react-dropbox-chooser": "^0.0.5",
+    "react-router-dom": "^7.5.1",
+    "tesseract.js": "^6.0.1",
+    "use-dropbox-chooser": "^0.0.6"
   },
   "devDependencies": {
     "@eslint/js": "^9.22.0",

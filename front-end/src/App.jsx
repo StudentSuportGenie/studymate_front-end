@@ -21,6 +21,13 @@ import TimeScheduleAdded from "./pages/StudentComponent/TimeScheduleAdded";
 import ViewAddedSchedule from "./pages/StudentComponent/ViewAddedSchedule";
 import DateReminder from "./pages/StudentComponent/DateReminder";
 import ViewAddedDatereminder from "./pages/StudentComponent/ViewAddedDatereminder";
+import KnowdgleItemAdded from "./pages/AdminComponenet/KnowdgleItemAdded";
+import AdminSidebartab from "./components/AdminSidebartab";
+import ViewKnowdgleItems from "./pages/AdminComponenet/ViewKnowdgleItems";
+// import AuthHeader from "./pages/AuthHeader";
+import StudentHelper from "./pages/StudentHelper";
+import DashbordSIDE from "./pages/Sidbarpages/Dashbord";
+import PDFScannCom from "./components/PDFScannCom";
 
 function App() {
   return (
@@ -50,6 +57,13 @@ function App() {
           path="/ViewAddedDatereminder"
           element={<ViewAddedDatereminder />}
         />
+        <Route path="/KnowdgleItemAdded" element={<KnowdgleItemAdded />} />
+        <Route path="/AdminSidebartab" element={<AdminSidebartab />} />
+        <Route path="/ViewKnowdgleItems" element={<ViewKnowdgleItems />} />
+        {/* <Route path="/auth" element={<AuthHeader />} /> */}
+        <Route path="/StudentHelper" element={<StudentHelper />} />
+        <Route path="/DashbordSIDE" element={<DashbordSIDE />} />
+        <Route path="/PDFScannCom" element={<PDFScannCom />} />
       </Routes>
 
       <Footer />

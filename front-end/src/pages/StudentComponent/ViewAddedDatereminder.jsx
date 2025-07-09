@@ -7,6 +7,7 @@ import {
   TableRow,
   Box,
   Button,
+  Typography,
 } from "@mui/material";
 import React, { useEffect, useState } from "react";
 import API from "../../Context/Axiox";
@@ -17,6 +18,31 @@ function ViewAddedDatereminder() {
   useEffect(() => {
     fetchdetails();
   }, []);
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      checkForNotifications();
+    }, 1000);
+
+    return () => clearInterval(interval); // Cleanup
+  }, [reminderDetails]); // Now listens to changes
+
+  const checkForNotifications = () => {
+    const now = new Date();
+
+    reminderDetails.forEach((reminder) => {
+      const reminderDateTime = new Date(`${reminder.reminderDate}T${reminder.reminderTime}`);
+      const timeDiff = Math.abs(now.getTime() - reminderDateTime.getTime());
+
+      if (timeDiff < 1000) {
+        showNotification(reminder);
+      }
+    });
+  };
+
+  const showNotification = (reminder) => {
+    alert(`🔔 Reminder: ${reminder.reminderTopic || 'You have a reminder now!'}`);
+  };
 
   const fetchdetails = async () => {
     try {
@@ -43,7 +69,7 @@ function ViewAddedDatereminder() {
       const respond = await API.delete(
         `deleteReminder?dateReminderId=${dateReminderId}`
       );
-      alert("Delete Success fully");
+      alert("Delete Successfully");
       window.location.reload();
     } catch (error) {
       if (error.response) {
@@ -58,7 +84,7 @@ function ViewAddedDatereminder() {
 
   const deleteConformation = (dateReminderId) => {
     const conformdelete = window.confirm(
-      "Are you sure you want to delete this Reminder ?"
+      "Are you sure you want to delete this Reminder?"
     );
     if (conformdelete) {
       handelDelete(dateReminderId);
@@ -67,7 +93,10 @@ function ViewAddedDatereminder() {
 
   return (
     <>
-      <Box>
+      <Box sx={{ mt: 5, mb: 5 }}>
+        <Typography textAlign="center" variant="h6" sx={{ margin: "10px" }}>
+          Your Added Reminders
+        </Typography>
         <TableContainer>
           <Table>
             <TableHead>
@@ -83,16 +112,17 @@ function ViewAddedDatereminder() {
               {reminderDetails.map((reminder) => (
                 <TableRow key={reminder.dateReminderId}>
                   <TableCell>{reminder.reminderDate?.split("T")[0]}</TableCell>
-                  <TableCell>
-                    {convertTo12Hour(reminder.reminderTime)}
-                  </TableCell>
+                  <TableCell>{convertTo12Hour(reminder.reminderTime)}</TableCell>
                   <TableCell>{reminder.reminderTopic}</TableCell>
                   <TableCell>
                     <Button>Edit</Button>
                   </TableCell>
                   <TableCell>
                     <Button
-                      onClick={() => deleteConformation(reminder.dateReminderId)}
+                      onClick={() =>
+                        deleteConformation(reminder.dateReminderId)
+                      }
+                      sx={{ bgcolor: "red", color: "white" }}
                     >
                       Delete
                     </Button>

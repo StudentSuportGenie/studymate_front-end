@@ -10,6 +10,7 @@ export const msalConfig = {
     cache: {
       cacheLocation: "localStorage", 
       storeAuthStateInCookie: false,
+      
     },
   };
   
@@ -17,4 +18,4 @@ export const msalConfig = {
     scopes: ["openid", "profile", "email"],
   };
   
-
+//  --legacy-peer-deps

@@ -138,7 +138,6 @@ function DetailsAddForm() {
             onChange={(e) => setBirthday(e.target.value)}
           />
 
-          {/* Option 1: Hide button if profile is empty */}
           {profile && (
             <Button
               type="submit"
@@ -148,16 +147,6 @@ function DetailsAddForm() {
               Submit
             </Button>
           )}
-
-          {/* Option 2: Disable button instead of hiding */}
-          {/* <Button
-            type="submit"
-            variant="outlined"
-            sx={{ float: "right", mt: 2 }}
-            disabled={!profile}
-          >
-            Submit
-          </Button> */}
         </form>
       </Box>
     </Box>
