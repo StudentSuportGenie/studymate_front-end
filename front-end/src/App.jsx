@@ -24,10 +24,11 @@ import ViewAddedDatereminder from "./pages/StudentComponent/ViewAddedDatereminde
 import KnowdgleItemAdded from "./pages/AdminComponenet/KnowdgleItemAdded";
 import AdminSidebartab from "./components/AdminSidebartab";
 import ViewKnowdgleItems from "./pages/AdminComponenet/ViewKnowdgleItems";
-// import AuthHeader from "./pages/AuthHeader";
+import NotificationIcon from "./components/NotifacitionCom";
 import StudentHelper from "./pages/StudentHelper";
 import DashbordSIDE from "./pages/Sidbarpages/Dashbord";
 import PDFScannCom from "./components/PDFScannCom";
+import AllDateReminders from "./pages/AdminComponenet/AllDateReminders";
 
 function App() {
   return (
@@ -64,6 +65,8 @@ function App() {
         <Route path="/StudentHelper" element={<StudentHelper />} />
         <Route path="/DashbordSIDE" element={<DashbordSIDE />} />
         <Route path="/PDFScannCom" element={<PDFScannCom />} />
+        <Route path="/NotificationIcon" element={<NotificationIcon />} />
+        <Route path="/AllDateReminders" element={<AllDateReminders />} />
       </Routes>
 
       <Footer />

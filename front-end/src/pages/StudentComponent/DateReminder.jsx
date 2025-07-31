@@ -3,6 +3,7 @@ import React, { useEffect, useState } from "react";
 import API from "../../Context/Axiox";
 import StudentSidetab from "../../components/StudentSidetab";
 import ViewAddedDatereminder from "./ViewAddedDatereminder";
+import NotificationIcon from "../../components/NotifacitionCom";
 
 function DateReminder() {
   const [dateReminder, setdateReminder] = useState("");
@@ -51,10 +52,12 @@ function DateReminder() {
   return (
     <>
       <StudentSidetab />
-      <Box sx={{
-        mt:'20px'
-        
-      }}>
+      <Box
+        sx={{
+          mt: "20px",
+        }}
+      >
+        <NotificationIcon/>
         <Typography textAlign="center" variant="h5">
           Add Your Reminder
         </Typography>

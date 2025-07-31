@@ -1,21 +1,22 @@
-import { Typography ,Box} from '@mui/material'
-import React from 'react'
-import { Link } from 'react-router-dom'
-import LogoutFunction from './LogoutFunction'
+import { Typography, Box } from "@mui/material";
+import React from "react";
+import { Link } from "react-router-dom";
+import LogoutFunction from "./LogoutFunction";
 
 function AdminSidebartab() {
   return (
-   <>
-     <Box>
+    <>
+      <Box>
         <Typography>
-            <Link to="/AdminHome">Home</Link>
-            {" > "}
-            <Link to="/KnowdgleItemAdded">Knoedgle</Link> {" > "}
-            <LogoutFunction/>
+          <Link to="/AdminHome">Home</Link>
+          {" > "}
+          <Link to="/KnowdgleItemAdded">Knoedgle</Link> {" > "}
+          <Link to="/AllDateReminders">DateReminder</Link>
+          <LogoutFunction />
         </Typography>
-     </Box>
-   </>
-  )
+      </Box>
+    </>
+  );
 }
 
-export default AdminSidebartab
+export default AdminSidebartab;

@@ -15,6 +15,7 @@ function OCRUploader() {
   const [question, setQuestion] = useState("");
   const [userEmail, setEmail] = useState("");
   const [output, setOutput] = useState("");
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -26,6 +27,7 @@ function OCRUploader() {
         const decode = jwtDecode(token);
         const usermail = decode.emails?.[0] || decode.email;
         setEmail(usermail);
+        setIsAuthenticated(true);
       } catch (err) {
         console.error("Invalid token", err);
         navigate("/");
@@ -44,7 +46,6 @@ function OCRUploader() {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    console.log(userEmail, text, question);
     try {
       const response = await axios.post(`http://127.0.0.1:8000/GetAnswer`, {
         useremail: userEmail,
@@ -52,7 +53,6 @@ function OCRUploader() {
         question: question,
       });
       setOutput(response.data?.answer || "No answer found.");
-      console.log(response.data);
     } catch (error) {
       console.error("API call failed:", error);
       setOutput("Error retrieving answer.");
@@ -73,6 +73,10 @@ function OCRUploader() {
         setLoading(false);
       });
   };
+
+  if (!isAuthenticated) {
+    return null; 
+  }
 
   return (
     <Box>
