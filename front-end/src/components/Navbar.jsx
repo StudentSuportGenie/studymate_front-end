@@ -84,14 +84,6 @@ function Navbar() {
           >
             Contact Us
           </Button>
-          <Button
-            component={Link}
-            to="/StudentHelper"
-            color="inherit"
-            sx={{ textTransform: "none" }}
-          >
-             Student Helper
-          </Button>
         </Stack>
 
         {/* Login Button */}

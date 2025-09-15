@@ -7,6 +7,7 @@ import { FaCircleArrowUp } from "react-icons/fa6";
 import { jwtDecode } from "jwt-decode";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
+import StudentSidetab from "../components/StudentSidetab";
 
 function OCRUploader() {
   const [image, setImage] = useState(null);
@@ -75,11 +76,12 @@ function OCRUploader() {
   };
 
   if (!isAuthenticated) {
-    return null; 
+    return null;
   }
 
   return (
     <Box>
+      <StudentSidetab />
       <Box sx={{ display: "flex", justifyContent: "flex-end", mr: 2 }}>
         <PDFScannCom />
       </Box>

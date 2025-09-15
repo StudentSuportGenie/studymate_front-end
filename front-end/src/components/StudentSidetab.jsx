@@ -12,8 +12,8 @@ function StudentSidetab() {
           <Link to="/StudentHome"> DashBord</Link> {">"}{" "}
           <Link to="/TimeScheduleAdded">TimeSchedule</Link> {">"}{" "}
           <Link to="/DateReminder">DateReminder</Link>
-          {">"}{" "}
-          <LogoutFunction/>
+          {">"} <Link to="/StudentHelper">StudentHelper</Link>
+          {">"} <LogoutFunction />
         </Typography>
       </Box>
     </>
