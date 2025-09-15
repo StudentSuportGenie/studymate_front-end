@@ -9,45 +9,80 @@ import {
   Button,
   Typography,
 } from "@mui/material";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import API from "../../Context/Axiox";
 
+import AUD1 from "../../Audios/ringtone.mp3";
+import AUD2 from "../../Audios/samsung.mp3";
+import AUD3 from "../../Audios/wake_up.mp3";
+
 function ViewAddedDatereminder() {
-  const [reminderDetails, setreminderdetails] = useState([]);
+  const [reminderDetails, setReminderDetails] = useState([]);
+  const [triggeredIds, setTriggeredIds] = useState(new Set());
+
+  const audioFiles = {
+    Ringtone: AUD1,
+    Samsung: AUD2,
+    "Wake Up": AUD3,
+  };
+
+  const audioRefs = {
+    Ringtone: useRef(null),
+    Samsung: useRef(null),
+    "Wake Up": useRef(null),
+  };
 
   useEffect(() => {
-    fetchdetails();
+    fetchDetails();
   }, []);
 
   useEffect(() => {
     const interval = setInterval(() => {
       checkForNotifications();
-    }, 1000);
+    }, 30000); // ✅ check every 30 seconds
 
-    return () => clearInterval(interval); // Cleanup
-  }, [reminderDetails]); // Now listens to changes
+    return () => clearInterval(interval);
+  }, [reminderDetails, triggeredIds]);
 
   const checkForNotifications = () => {
     const now = new Date();
 
     reminderDetails.forEach((reminder) => {
-      const reminderDateTime = new Date(`${reminder.reminderDate}T${reminder.reminderTime}`);
-      const timeDiff = Math.abs(now.getTime() - reminderDateTime.getTime());
+      const reminderDateTime = new Date(
+        `${reminder.reminderDate}T${reminder.reminderTime}`
+      );
 
-      if (timeDiff < 1000) {
+   
+      const nowKey = `${now.getFullYear()}-${now.getMonth()}-${now.getDate()} ${now.getHours()}:${now.getMinutes()}`;
+      const reminderKey = `${reminderDateTime.getFullYear()}-${reminderDateTime.getMonth()}-${reminderDateTime.getDate()} ${reminderDateTime.getHours()}:${reminderDateTime.getMinutes()}`;
+
+      if (
+        nowKey === reminderKey &&
+        !triggeredIds.has(reminder.dateReminderId)
+      ) {
         showNotification(reminder);
+        setTriggeredIds((prev) => new Set(prev).add(reminder.dateReminderId));
       }
     });
   };
 
   const showNotification = (reminder) => {
-    alert(`🔔 Reminder: ${reminder.reminderTopic || 'You have a reminder now!'}`);
+    alert(
+      `🔔 Reminder: ${reminder.reminderTopic || "You have a reminder now!"}`
+    );
+
+    const audioName = reminder.ringingTone;
+    if (audioName && audioRefs[audioName]?.current) {
+      audioRefs[audioName].current
+        .play()
+        .catch((err) => console.error("Audio play failed:", err));
+    }
   };
 
-  const fetchdetails = async () => {
+  const fetchDetails = async () => {
     try {
       const respond = await API.get(`getReminder`);
-      setreminderdetails(respond.data);
+      setReminderDetails(respond.data);
       console.log(respond.data);
     } catch (error) {
       console.log(error);
@@ -64,11 +99,9 @@ function ViewAddedDatereminder() {
     return `${hour}:${minute} ${ampm}`;
   }
 
-  const handelDelete = async (dateReminderId) => {
+  const handleDelete = async (dateReminderId) => {
     try {
-      const respond = await API.delete(
-        `deleteReminder?dateReminderId=${dateReminderId}`
-      );
+      await API.delete(`deleteReminder?dateReminderId=${dateReminderId}`);
       alert("Delete Successfully");
       window.location.reload();
     } catch (error) {
@@ -82,17 +115,22 @@ function ViewAddedDatereminder() {
     }
   };
 
-  const deleteConformation = (dateReminderId) => {
-    const conformdelete = window.confirm(
+  const deleteConfirmation = (dateReminderId) => {
+    const confirmDelete = window.confirm(
       "Are you sure you want to delete this Reminder?"
     );
-    if (conformdelete) {
-      handelDelete(dateReminderId);
+    if (confirmDelete) {
+      handleDelete(dateReminderId);
     }
   };
 
   return (
     <>
+      {/* Hidden audio players */}
+      {Object.entries(audioFiles).map(([name, file]) => (
+        <audio key={name} ref={audioRefs[name]} src={file} />
+      ))}
+
       <Box sx={{ mt: 5, mb: 5 }}>
         <Typography textAlign="center" variant="h6" sx={{ margin: "10px" }}>
           Your Added Reminders
@@ -101,9 +139,10 @@ function ViewAddedDatereminder() {
           <Table>
             <TableHead>
               <TableRow>
-                <TableCell>reminderDate</TableCell>
-                <TableCell>reminderTime</TableCell>
-                <TableCell>reminderTopic</TableCell>
+                <TableCell>Date</TableCell>
+                <TableCell>Time</TableCell>
+                <TableCell>Topic</TableCell>
+                <TableCell>Audio</TableCell>
                 <TableCell>Edit</TableCell>
                 <TableCell>Delete</TableCell>
               </TableRow>
@@ -114,14 +153,13 @@ function ViewAddedDatereminder() {
                   <TableCell>{reminder.reminderDate?.split("T")[0]}</TableCell>
                   <TableCell>{convertTo12Hour(reminder.reminderTime)}</TableCell>
                   <TableCell>{reminder.reminderTopic}</TableCell>
+                  <TableCell>{reminder.ringingTone}</TableCell>
                   <TableCell>
                     <Button>Edit</Button>
                   </TableCell>
                   <TableCell>
                     <Button
-                      onClick={() =>
-                        deleteConformation(reminder.dateReminderId)
-                      }
+                      onClick={() => deleteConfirmation(reminder.dateReminderId)}
                       sx={{ bgcolor: "red", color: "white" }}
                     >
                       Delete
