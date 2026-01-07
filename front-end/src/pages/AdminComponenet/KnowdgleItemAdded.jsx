@@ -39,7 +39,7 @@ function KnowdgleItemAdded() {
       contentType
     );
     try {
-      const respond = await API.post(`addItems`, {
+      await API.post(`addItems`, {
         knowdgleItemTitle: contentTitle,
         knowdgleItemDescription: contentDiscription,
         knowdgleitemLink: constLink,
@@ -68,47 +68,74 @@ function KnowdgleItemAdded() {
         }}
       >
         <form onSubmit={handleSubmit}>
-          <Typography align="center">Add the Content</Typography>
-          <TextField
-            label="Content Title"
-            fullWidth
-            margin="normal"
-            value={contentTitle}
-            onChange={(e) => setcontentTitle(e.target.value)}
-          />
-          <TextField
-            label="Content Discription"
-            fullWidth
-            margin="normal"
-            value={contentDiscription}
-            onChange={(e) => setcontentDiscription(e.target.value)}
-          />
-          <TextField
-            label="Content Link"
-            fullWidth
-            margin="normal"
-            value={constLink}
-            onChange={(e) => setconstLink(e.target.value)}
-          />
-          <FormControl fullWidth margin="normal">
-            <InputLabel id="typeID">Content Type</InputLabel>
-            <Select
-              labelId="typeID"
-              value={contentType}
-              label="ContentType"
-              onChange={handelContent}
-            >
-              <MenuItem value="PDF">PDF</MenuItem>
-              <MenuItem value="audio">Audio</MenuItem>
-              <MenuItem value="video">Video</MenuItem>
-            </Select>
-          </FormControl>
-          <Button type="submit" variant="outlined">
-            Submit
-          </Button>
+          <Typography
+            align="center"
+            variant="h4"
+            fontFamily="'Roboto', sans-serif"
+            gutterBottom
+            m={5}
+          >
+            Add the Content
+          </Typography>
+
+          <Box
+            mx={5}
+            mb={5}
+            border={1}
+            borderColor="grey.500"
+            borderRadius={2}
+            p={2}
+          >
+            <TextField
+              label="Content Title"
+              fullWidth
+              margin="normal"
+              value={contentTitle}
+              onChange={(e) => setcontentTitle(e.target.value)}
+            />
+            <TextField
+              label="Content Discription"
+              fullWidth
+              margin="normal"
+              value={contentDiscription}
+              onChange={(e) => setcontentDiscription(e.target.value)}
+            />
+            <TextField
+              label="Content Link"
+              fullWidth
+              margin="normal"
+              value={constLink}
+              onChange={(e) => setconstLink(e.target.value)}
+            />
+            <FormControl fullWidth margin="normal">
+              <InputLabel id="typeID">Content Type</InputLabel>
+              <Select
+                labelId="typeID"
+                value={contentType}
+                label="ContentType"
+                onChange={handelContent}
+              >
+                <MenuItem value="PDF">PDF</MenuItem>
+                <MenuItem value="audio">Audio</MenuItem>
+                <MenuItem value="video">Video</MenuItem>
+              </Select>
+            </FormControl>
+            <Button type="submit" variant="outlined">
+              Submit
+            </Button>
+          </Box>
         </form>
       </Box>
       <Box>
+        <Typography
+          align="center"
+          variant="h5"
+          fontFamily="'Roboto', sans-serif"
+          gutterBottom
+          m={5}
+        >
+          View Knowledge Items
+        </Typography>
         <ViewKnowdgleItems />
       </Box>
     </>

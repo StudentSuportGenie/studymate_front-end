@@ -1,6 +1,20 @@
 import React, { useState } from "react";
-import { Container, Typography, Grid, Card, CardContent, CardActions, Button, Paper, Box } from "@mui/material";
-import { CalendarToday, Chat, AccountCircleOutlined } from "@mui/icons-material";
+import {
+  Container,
+  Typography,
+  Grid,
+  Card,
+  CardContent,
+  CardActions,
+  Button,
+  Paper,
+  Box,
+} from "@mui/material";
+import {
+  CalendarToday,
+  Chat,
+  AccountCircleOutlined,
+} from "@mui/icons-material";
 import Calendar from "react-calendar"; // You can use any calendar package for React
 
 function Dashboard() {
@@ -24,12 +38,20 @@ function Dashboard() {
       <Grid container spacing={4} justifyContent="center">
         {/* Calendar Section */}
         <Grid item xs={12} sm={6}>
-          <Card sx={{ display: "flex", flexDirection: "column", alignItems: "center", p: 3 }}>
+          <Card
+            sx={{
+              display: "flex",
+              flexDirection: "column",
+              alignItems: "center",
+              p: 3,
+            }}
+          >
             <CalendarToday sx={{ fontSize: 40, color: "primary.main" }} />
             <CardContent>
               <Typography variant="h6">Your Calendar 📅</Typography>
               <Typography variant="body1" color="text.secondary">
-                Stay on top of your schedule! Set up reminders, deadlines, and events here.
+                Stay on top of your schedule! Set up reminders, deadlines, and
+                events here.
               </Typography>
             </CardContent>
             <CardActions>
@@ -52,26 +74,47 @@ function Dashboard() {
 
         {/* AI Chat Section */}
         <Grid item xs={12} sm={6}>
-          <Card sx={{ display: "flex", flexDirection: "column", alignItems: "center", p: 3 }}>
+          <Card
+            sx={{
+              display: "flex",
+              flexDirection: "column",
+              alignItems: "center",
+              p: 3,
+            }}
+          >
             <Chat sx={{ fontSize: 40, color: "secondary.main" }} />
             <CardContent>
               <Typography variant="h6">Ask AI your Questions 🤖</Typography>
               <Typography variant="body1" color="text.secondary">
-                Have a question? Our AI chat is here to assist you! Just ask away.
+                Have a question? Our AI chat is here to assist you! Just ask
+                away.
               </Typography>
             </CardContent>
             <CardActions>
-              <Button size="small" variant="contained" color="secondary" sx={{ mt: 2 }}>
+              <Button
+                size="small"
+                variant="contained"
+                color="secondary"
+                sx={{ mt: 2 }}
+              >
                 Chat with AI
               </Button>
             </CardActions>
           </Card>
         </Grid>
 
-        {/* User Profile Section */}
         <Grid item xs={12} sm={4}>
-          <Card sx={{ display: "flex", flexDirection: "column", alignItems: "center", p: 3 }}>
-            <AccountCircleOutlined sx={{ fontSize: 40, color: "primary.main" }} />
+          <Card
+            sx={{
+              display: "flex",
+              flexDirection: "column",
+              alignItems: "center",
+              p: 3,
+            }}
+          >
+            <AccountCircleOutlined
+              sx={{ fontSize: 40, color: "primary.main" }}
+            />
             <CardContent>
               <Typography variant="h6">Profile</Typography>
               <Typography variant="h4" color="primary">
@@ -91,4 +134,3 @@ function Dashboard() {
 }
 
 export default Dashboard;
-

@@ -79,14 +79,10 @@ function DetailsAddForm() {
 
       alert("Details added successfully");
       window.location.reload();
-    }catch (error) {
+    } catch (error) {
       if (error.response) {
         console.error("Error response:", error.response);
-        alert(
-          `${
-            error.response.data.message
-          }`
-        );
+        alert(`${error.response.data.message}`);
       } else {
         console.error("Error:", error.message);
         alert("An unexpected error occurred.");
@@ -95,7 +91,9 @@ function DetailsAddForm() {
   };
 
   return (
-    <Box sx={{ display: "flex", justifyContent: "center", alignItems: "center" }}>
+    <Box
+      sx={{ display: "flex", justifyContent: "center", alignItems: "center" }}
+    >
       <Box
         sx={{
           width: "50%",
@@ -107,7 +105,7 @@ function DetailsAddForm() {
         }}
       >
         <Typography variant="h4" align="center" sx={{ marginBottom: "30px" }}>
-          Add your Details
+          <b>Add Your Details</b>
         </Typography>
 
         <form onSubmit={handleSubmit}>
@@ -134,7 +132,6 @@ function DetailsAddForm() {
             type="date"
             fullWidth
             margin="normal"
-        
             onChange={(e) => setBirthday(e.target.value)}
           />
 

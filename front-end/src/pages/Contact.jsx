@@ -30,14 +30,14 @@ function Contact() {
         "0rTCCPd3w0dUM2d7d"       
       )
       .then(
-        (result) => {
+        () => {
           alert("Message sent successfully!");
           setName("");
           setEmail("");
           setSubject("");
           setMessage("");
         },
-        (error) => {
+        () => {
           alert("Failed to send message. Please try again later.");
         }
       );

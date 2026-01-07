@@ -30,9 +30,7 @@ function ViewKnowdgleItems() {
 
   const handelDelete = (knowdgleItemId) => {
     try {
-      const respond = API.delete(
-        `deleteItems?knowledgeItemID=${knowdgleItemId}`
-      );
+      API.delete(`deleteItems?knowledgeItemID=${knowdgleItemId}`);
       alert("Delete Successfuly");
       window.location.reload();
     } catch (error) {
@@ -57,7 +55,7 @@ function ViewKnowdgleItems() {
 
   return (
     <>
-      <Box>
+      <Box sx={{ marginBottom: 5 , marginLeft:5, marginRight:5}}>
         <TableContainer>
           <Table>
             <TableHead>

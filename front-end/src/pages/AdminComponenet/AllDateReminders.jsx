@@ -30,15 +30,14 @@ function AllDateReminders() {
     fetchData();
   }, []);
 
-
   return (
     <>
       <AdminSidebartab />
       <TableContainer component={Paper} sx={{ mt: 4 }}>
-        <Typography variant="h5" align="center" gutterBottom>
-          All Date Reminders
+        <Typography variant="h5" align="center" gutterBottom m={5}>
+          <b>Date Reminders</b>
         </Typography>
-        <Table>
+        <Table sx={{ marginBottom:"10px"}}>
           <TableHead>
             <TableRow>
               <TableCell>Reminder Date</TableCell>

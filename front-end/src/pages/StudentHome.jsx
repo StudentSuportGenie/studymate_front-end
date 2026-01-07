@@ -7,8 +7,6 @@ import { Typography, Box } from "@mui/material";
 import DetailsEditForm from "./StudentComponent/DetailsEditForm";
 import StudentSidetab from "../components/StudentSidetab";
 
-
-
 function StudentHome() {
   const navigate = useNavigate();
 
@@ -51,9 +49,9 @@ function StudentHome() {
 
   return (
     <>
-    <StudentSidetab/>
+      <StudentSidetab />
       <Typography align="center" variant="h5" sx={{ mt: "20px" }}>
-        Welcome, {name}
+       <b>Welcome, {name}</b>
       </Typography>
 
       <Box sx={{ display: dataddedform }}>

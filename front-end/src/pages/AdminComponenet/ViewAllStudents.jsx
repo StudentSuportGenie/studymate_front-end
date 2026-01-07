@@ -30,7 +30,7 @@ function ViewAllStudents() {
 
   const handeldelete = async (studentDetailsId) => {
     try {
-      const respond = await API.delete(
+      await API.delete(
         `deletestudent?studentId=${studentDetailsId}`
       );
       alert("Delete Succesfully");
@@ -57,10 +57,10 @@ function ViewAllStudents() {
 
   return (
     <>
-      <Typography align="center" variant="h4">
-        Students details
+      <Typography align="center" variant="h4" fontFamily="'Roboto', sans-serif" gutterBottom  m={5}>
+      <b>Students Details</b> 
       </Typography>
-      <TableContainer>
+      <TableContainer sx={{ marginBottom: 5 }}>
         <Table>
           <TableHead>
             <TableRow>
