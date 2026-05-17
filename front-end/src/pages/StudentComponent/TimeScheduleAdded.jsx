@@ -31,7 +31,7 @@ function TimeScheduleAdded() {
       startTime.length === 5 ? `${startTime}:00` : startTime;
 
     try {
-      const response = await API.post("RadScheduler", {
+      await API.post("RadScheduler", {
         scheduleDate: date,
         scheduleStartTime: formattedTime,
         hourCount: hourCount,

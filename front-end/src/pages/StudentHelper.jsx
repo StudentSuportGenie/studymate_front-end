@@ -10,7 +10,7 @@ import { useNavigate } from "react-router-dom";
 import StudentSidetab from "../components/StudentSidetab";
 
 function OCRUploader() {
-  const [image, setImage] = useState(null);
+  // image state removed (unused)
   const [text, setText] = useState("");
   const [loading, setLoading] = useState(false);
   const [question, setQuestion] = useState("");
@@ -40,7 +40,6 @@ function OCRUploader() {
   const handleFileChange = (e) => {
     const file = e.target.files[0];
     if (file) {
-      setImage(URL.createObjectURL(file));
       extractTextFromImage(file);
     }
   };

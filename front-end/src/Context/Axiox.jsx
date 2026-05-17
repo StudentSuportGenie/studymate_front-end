@@ -1,5 +1,6 @@
 // --legacy-peer-deps
 import axios from "axios";
+import { jwtDecode } from "jwt-decode";
 
 const API = axios.create({
   baseURL: "http://localhost:8089/API/V1/",
@@ -13,7 +14,14 @@ API.interceptors.request.use(
   (config) => {
     const token = sessionStorage.getItem("studyBuddy");
     if (token) {
-      config.headers.Authorization = `Bearer ${token}`;
+        config.headers.Authorization = `Bearer ${token}`;
+        try {
+          const decoded = jwtDecode(token);
+          const email = decoded?.emails?.[0] || decoded?.email;
+          if (email) config.headers["X-User-Email"] = email;
+        } catch {
+          // ignore decode errors
+        }
     }
     return config;
   },
