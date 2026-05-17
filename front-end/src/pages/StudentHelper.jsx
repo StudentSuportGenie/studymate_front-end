@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import Tesseract from "tesseract.js";
 import PDFScannCom from "../components/PDFScannCom";
-import { Box, Button, TextField } from "@mui/material";
+import { Box, Button, TextField, Typography, CircularProgress, Fade } from "@mui/material";
 import { MdOutlinePhotoSizeSelectActual } from "react-icons/md";
 import { FaCircleArrowUp } from "react-icons/fa6";
 import { jwtDecode } from "jwt-decode";
@@ -16,6 +16,7 @@ function OCRUploader() {
   const [question, setQuestion] = useState("");
   const [userEmail, setEmail] = useState("");
   const [output, setOutput] = useState("");
+  const [answerLoading, setAnswerLoading] = useState(false);
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const navigate = useNavigate();
 
@@ -46,7 +47,7 @@ function OCRUploader() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-
+    setAnswerLoading(true);
     try {
       const response = await axios.post(`http://127.0.0.1:8000/GetAnswer`, {
         useremail: userEmail,
@@ -57,6 +58,8 @@ function OCRUploader() {
     } catch (error) {
       console.error("API call failed:", error);
       setOutput("Error retrieving answer.");
+    } finally {
+      setAnswerLoading(false);
     }
   };
 
@@ -73,6 +76,80 @@ function OCRUploader() {
         console.error("OCR failed:", err);
         setLoading(false);
       });
+  };
+
+  const renderInlineFormatting = (str) => {
+    if (!str) return null;
+    const parts = [];
+    const regex = /\*\*(.+?)\*\*/g;
+    let lastIndex = 0;
+    let m;
+    while ((m = regex.exec(str)) !== null) {
+      if (m.index > lastIndex) parts.push(str.slice(lastIndex, m.index));
+      parts.push(<strong key={lastIndex}>{m[1]}</strong>);
+      lastIndex = regex.lastIndex;
+    }
+    if (lastIndex < str.length) parts.push(str.slice(lastIndex));
+    return parts.map((p, i) => (typeof p === "string" ? <span key={i}>{p}</span> : p));
+  };
+
+  const renderFormatted = (raw) => {
+    if (!raw) return <Typography variant="body1">No answer.</Typography>;
+    const lines = raw.split(/\r?\n/);
+    const elems = [];
+    let listBuffer = [];
+
+    const flushList = (key) => {
+      if (listBuffer.length) {
+        elems.push(
+          <ul key={`ul-${key}`} style={{ marginTop: 6, marginBottom: 6 }}>
+            {listBuffer}
+          </ul>
+        );
+        listBuffer = [];
+      }
+    };
+
+    lines.forEach((ln, idx) => {
+      const line = ln.trim();
+      if (!line) {
+        flushList(idx);
+        elems.push(<div key={`br-${idx}`} style={{ height: 8 }} />);
+        return;
+      }
+
+      const headingMatch = /^\*\*(.+)\*\*/.exec(line);
+      if (headingMatch) {
+        flushList(idx);
+        elems.push(
+          <Typography key={`h-${idx}`} variant="h6" sx={{ fontWeight: 700, mt: 1 }}>
+            {headingMatch[1]}
+          </Typography>
+        );
+        return;
+      }
+
+      const bulletMatch = /^[-*•]\s*(.+)/.exec(line);
+      if (bulletMatch) {
+        listBuffer.push(
+          <li key={`li-${idx}`} style={{ marginBottom: 6 }}>
+            {renderInlineFormatting(bulletMatch[1])}
+          </li>
+        );
+        return;
+      }
+
+      // regular paragraph
+      flushList(idx);
+      elems.push(
+        <Typography key={`p-${idx}`} variant="body1" sx={{ mt: 0.5 }}>
+          {renderInlineFormatting(line)}
+        </Typography>
+      );
+    });
+
+    flushList("end");
+    return <div>{elems}</div>;
   };
 
   if (!isAuthenticated) {
@@ -101,7 +178,26 @@ function OCRUploader() {
             overflow: "auto",
           }}
         >
-          {loading ? "Processing image..." : output}
+          {loading ? (
+            "Processing image..."
+          ) : answerLoading ? (
+            <Box sx={{ display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", py: 4 }}>
+              <CircularProgress />
+              <Typography variant="body2" sx={{ mt: 1 }}>
+                Fetching answer...
+              </Typography>
+            </Box>
+          ) : output ? (
+            <Fade in={!answerLoading} timeout={300}>
+              <div>{renderFormatted(output)}</div>
+            </Fade>
+          ) : text ? (
+            <Typography variant="body2" sx={{ whiteSpace: "pre-wrap" }}>
+              {text}
+            </Typography>
+          ) : (
+            <Typography variant="body2">No content yet.</Typography>
+          )}
         </Box>
       </Box>
 
