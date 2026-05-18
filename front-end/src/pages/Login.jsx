@@ -4,7 +4,6 @@ import {
   Typography,
   TextField,
   Button,
-  Paper,
   Box,
   Grid,
 } from "@mui/material";
@@ -25,26 +24,35 @@ function Login() {
 
     // Handle login logic here (API call, etc.)
     console.log("Logging in with:", email, password);
-
-    // Clear error if credentials are valid
     setError("");
   };
 
   return (
-    <Container maxWidth="xs" sx={{ py: 6 }}>
-      <Paper elevation={3} sx={{ p: 3 }}>
+    <Container maxWidth="xs" className="page-enter" sx={{ py: 8 }}>
+      <Box className="glass-card" sx={{ p: { xs: 3, md: 4 } }}>
         <Box textAlign="center" mb={4}>
-          <Typography variant="h4" gutterBottom>
-            Login to AI Study
+          <Typography 
+            variant="h3" 
+            gutterBottom
+            sx={{
+              fontFamily: "Outfit",
+              fontWeight: 800,
+              background: "linear-gradient(45deg, #818cf8, #ec4899)",
+              WebkitBackgroundClip: "text",
+              WebkitTextFillColor: "transparent",
+              mb: 1
+            }}
+          >
+            Welcome Back Key 🔑
           </Typography>
           <Typography variant="body1" color="text.secondary">
-            Welcome back! Please enter your credentials to continue.
+            Please enter your credentials to access your StudyMate.
           </Typography>
         </Box>
 
         {error && (
-          <Box sx={{ mb: 2 }}>
-            <Typography variant="body2" color="error">
+          <Box sx={{ mb: 2.5, p: 1.5, borderRadius: "10px", backgroundColor: "rgba(239, 68, 68, 0.1)", border: "1px solid rgba(239, 68, 68, 0.2)" }}>
+            <Typography variant="body2" color="error" align="center">
               {error}
             </Typography>
           </Box>
@@ -53,13 +61,14 @@ function Login() {
         {/* Login Form */}
         <form onSubmit={handleSubmit}>
           <TextField
-            label="Email"
+            label="Email Address"
             type="email"
             fullWidth
             variant="outlined"
             value={email}
             onChange={(e) => setEmail(e.target.value)}
             sx={{ mb: 2 }}
+            required
           />
           <TextField
             label="Password"
@@ -69,28 +78,28 @@ function Login() {
             value={password}
             onChange={(e) => setPassword(e.target.value)}
             sx={{ mb: 3 }}
+            required
           />
 
           {/* Login Button */}
           <Button
             type="submit"
-            variant="contained"
-            color="primary"
+            className="glow-button"
             fullWidth
-            sx={{ py: 1.5 }}
+            size="large"
           >
             Login
           </Button>
         </form>
 
         {/* Forgot Password Link */}
-        <Grid container justifyContent="flex-end" sx={{ mt: 2 }}>
+        <Grid container justifyContent="flex-end" sx={{ mt: 2.5 }}>
           <Grid item>
             <Typography
               variant="body2"
               color="primary"
-              sx={{ cursor: "pointer" }}
-              onClick={() => alert("Forgot Password Clicked!")}
+              sx={{ cursor: "pointer", fontWeight: 600, "&:hover": { color: "secondary.main" } }}
+              onClick={() => alert("Forgot Password feature under development.")}
             >
               Forgot Password?
             </Typography>
@@ -100,20 +109,21 @@ function Login() {
         {/* Sign Up Section */}
         <Box textAlign="center" sx={{ mt: 4 }}>
           <Typography variant="body2" color="text.secondary">
-            Don’t have an account?{" "}
+            Don’t have an account yet?{" "}
             <Button
-              variant="outlined"
+              component={Link}
+              to="/signup"
+              variant="text"
               color="secondary"
-              onClick={() => alert("Navigate to Sign Up page")}
+              sx={{ textTransform: "none", fontWeight: 700 }}
             >
-              <Link to="/signup">Sign Up</Link>
+              Sign Up
             </Button>
           </Typography>
         </Box>
-      </Paper>
+      </Box>
     </Container>
   );
 }
 
 export default Login;
-

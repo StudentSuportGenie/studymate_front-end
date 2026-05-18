@@ -48,6 +48,10 @@ function DateReminder() {
 
   const handelSubmit = async (e) => {
     e.preventDefault();
+    if (!studentdetails || !studentdetails.studentDetailsId) {
+      alert("Student profile details not found. Please fill in your details on the Home page first!");
+      return;
+    }
     try {
       await API.post(`addReminder`, {
         studentDetailsId: studentdetails.studentDetailsId,
@@ -71,11 +75,33 @@ function DateReminder() {
   };
 
   return (
-    <>
+    <Box className="page-enter" sx={{ px: { xs: 2, md: 4 } }}>
       <StudentSidetab />
-      <Box sx={{ mt: "20px" }}>
+      <Box 
+        className="glass-card"
+        sx={{ 
+          maxWidth: 600, 
+          mx: "auto", 
+          mt: 4, 
+          mb: 6, 
+          p: { xs: 3, md: 4 },
+          position: "relative",
+          overflow: "hidden"
+        }}
+      >
         <NotificationIcon />
-        <Typography textAlign="center" variant="h5">
+        <Typography 
+          textAlign="center" 
+          variant="h4" 
+          sx={{ 
+            fontFamily: "Outfit", 
+            fontWeight: 700, 
+            mb: 3,
+            background: "linear-gradient(45deg, #818cf8, #ec4899)",
+            WebkitBackgroundClip: "text",
+            WebkitTextFillColor: "transparent"
+          }}
+        >
           Add Your Reminder
         </Typography>
         <form onSubmit={handelSubmit}>
@@ -86,6 +112,8 @@ function DateReminder() {
             type="date"
             value={dateReminder}
             onChange={(e) => setdateReminder(e.target.value)}
+            InputLabelProps={{ shrink: true }}
+            sx={{ mb: 2 }}
           />
           <TextField
             label="Time"
@@ -94,6 +122,8 @@ function DateReminder() {
             type="time"
             value={timesetReminder}
             onChange={(e) => settimeReminder(e.target.value)}
+            InputLabelProps={{ shrink: true }}
+            sx={{ mb: 2 }}
           />
           <TextField
             label="Reminder Topic"
@@ -102,11 +132,12 @@ function DateReminder() {
             type="text"
             value={reminderTopic}
             onChange={(e) => setreminderTopic(e.target.value)}
+            sx={{ mb: 2 }}
           />
 
           {/* Show all audios with play option */}
-          <FormControl fullWidth margin="normal">
-            <Typography variant="subtitle1" sx={{ mb: 1 }}>
+          <FormControl fullWidth margin="normal" sx={{ mb: 3 }}>
+            <Typography variant="subtitle1" sx={{ mb: 1, fontFamily: "Outfit", fontWeight: 600 }}>
               Choose Your Reminder Audio
             </Typography>
             <RadioGroup
@@ -123,7 +154,7 @@ function DateReminder() {
                     control={<Radio />}
                     label={audio.name}
                   />
-                  <audio controls style={{ marginLeft: "10px" }}>
+                  <audio controls style={{ marginLeft: "10px", height: "32px" }}>
                     <source src={audio.file} type="audio/mpeg" />
                     Your browser does not support the audio element.
                   </audio>
@@ -134,14 +165,18 @@ function DateReminder() {
 
           <Button
             type="submit"
-            sx={{ bgcolor: "green", color: "white", mt: 2 }}
+            className="glow-button"
+            fullWidth
+            size="large"
           >
-            Submit
+            Submit Reminder
           </Button>
         </form>
       </Box>
-      <ViewAddedDatereminder />
-    </>
+      <Box sx={{ mt: 4 }}>
+        <ViewAddedDatereminder />
+      </Box>
+    </Box>
   );
 }
 

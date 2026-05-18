@@ -4,8 +4,8 @@ import {
   TableBody,
   TableCell,
   TableContainer,
-  TableHead,
   TableRow,
+  TableHead,
   Button,
   TextField,
 } from "@mui/material";
@@ -68,14 +68,10 @@ function ViewAddedSchedule() {
       await API.delete(`deleteDetails?scheduleId=${id}`);
       alert("Deleted successfully");
       fetchscheduledata();
-    }catch (error) {
+    } catch (error) {
       if (error.response) {
         console.error("Error response:", error.response);
-        alert(
-          `${
-            error.response.data.message
-          }`
-        );
+        alert(`${error.response.data.message}`);
       } else {
         console.error("Error:", error.message);
         alert("An unexpected error occurred.");
@@ -84,13 +80,14 @@ function ViewAddedSchedule() {
   };
 
   const deleteConformation = (id) => {
-    const conformation = window.confirm("Are you sure you wanto delete this Schedule ?");
-    if(conformation) {
+    const conformation = window.confirm("Are you sure you want to delete this Schedule?");
+    if (conformation) {
       handleDelete(id);
     }
-  }
+  };
 
   const calculateEndTime = (startTime, hourCount) => {
+    if (!startTime) return "";
     const [hours, minutes] = startTime.split(":").map(Number);
     const date = new Date();
     date.setHours(hours + hourCount, minutes, 0);
@@ -100,99 +97,145 @@ function ViewAddedSchedule() {
   const formatDate = (isoDate) => new Date(isoDate).toISOString().split("T")[0];
 
   return (
-    <Box sx={{
-      mt:4,
-      mb:5,
-    }}>
+    <Box 
+      className="glass-card page-enter"
+      sx={{
+        mt: 4,
+        mb: 6,
+        p: { xs: 2, md: 3 },
+        borderRadius: "24px",
+        overflow: "hidden"
+      }}
+    >
       <TableContainer>
-        <Table>
+        <Table sx={{ minWidth: 650 }}>
           <TableHead>
             <TableRow>
-              <TableCell>Date</TableCell>
-              <TableCell>Start Time</TableCell>
-              <TableCell>End Time</TableCell>
-              <TableCell>Topic</TableCell>
-              <TableCell>Hours</TableCell>
-              <TableCell>Edit</TableCell>
-              <TableCell>Action</TableCell>
+              <TableCell sx={{ fontFamily: "Outfit", fontWeight: 600 }}>Date</TableCell>
+              <TableCell sx={{ fontFamily: "Outfit", fontWeight: 600 }}>Start Time</TableCell>
+              <TableCell sx={{ fontFamily: "Outfit", fontWeight: 600 }}>End Time</TableCell>
+              <TableCell sx={{ fontFamily: "Outfit", fontWeight: 600 }}>Topic</TableCell>
+              <TableCell sx={{ fontFamily: "Outfit", fontWeight: 600 }}>Hours</TableCell>
+              <TableCell sx={{ fontFamily: "Outfit", fontWeight: 600 }} align="center">Edit</TableCell>
+              <TableCell sx={{ fontFamily: "Outfit", fontWeight: 600 }} align="center">Action</TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
-            {scheduledata.map((row) => {
-              const isEditing = editId === row.studentDetailsId;
-              const endTime = calculateEndTime(
-                isEditing ? editedRow.scheduleStartTime : row.scheduleStartTime,
-                isEditing ? editedRow.hourCount : row.hourCount
-              );
-              return (
-                <TableRow key={row.studentDetailsId}>
-                  <TableCell>
-                    {isEditing ? (
-                      <TextField
-                        type="date"
-                        name="scheduleDate"
-                        value={formatDate(editedRow.scheduleDate)}
-                        onChange={handleChange}
-                      />
-                    ) : (
-                      formatDate(row.scheduleDate)
-                    )}
-                  </TableCell>
-                  <TableCell>
-                    {isEditing ? (
-                      <TextField
-                        type="time"
-                        name="scheduleStartTime"
-                        value={editedRow.scheduleStartTime}
-                        onChange={handleChange}
-                      />
-                    ) : (
-                      row.scheduleStartTime.substring(0, 5)
-                    )}
-                  </TableCell>
-                  <TableCell>{endTime}</TableCell>
-                  <TableCell>
-                    {isEditing ? (
-                      <TextField
-                        name="scheduleTopic"
-                        value={editedRow.scheduleTopic}
-                        onChange={handleChange}
-                      />
-                    ) : (
-                      row.scheduleTopic
-                    )}
-                  </TableCell>
-                  <TableCell>
-                    {isEditing ? (
-                      <TextField
-                        type="number"
-                        name="hourCount"
-                        value={editedRow.hourCount}
-                        onChange={handleChange}
-                      />
-                    ) : (
-                      row.hourCount
-                    )}
-                  </TableCell>
-                  <TableCell>
-                    {isEditing ? (
-                      <Button onClick={handleSaveClick}>Save</Button>
-                    ) : (
-                      <Button onClick={() => handleEditClick(row)}>Edit</Button>
-                    )}
-                  </TableCell>
-                  <TableCell>
-                    <Button onClick={() => deleteConformation(row.scheduleId)} sx={{
-                      bgcolor:"red",
-                      color:"white"
-                      
-                    }}>
-                      Delete
-                    </Button>
-                  </TableCell>
-                </TableRow>
-              );
-            })}
+            {scheduledata.length === 0 ? (
+              <TableRow>
+                <TableCell colSpan={7} align="center" sx={{ py: 4, color: "text.secondary" }}>
+                  No schedules added yet.
+                </TableCell>
+              </TableRow>
+            ) : (
+              scheduledata.map((row) => {
+                const isEditing = editId === row.studentDetailsId;
+                const endTime = calculateEndTime(
+                  isEditing ? editedRow.scheduleStartTime : row.scheduleStartTime,
+                  isEditing ? editedRow.hourCount : row.hourCount
+                );
+                return (
+                  <TableRow 
+                    key={row.studentDetailsId}
+                    sx={{ 
+                      "&:hover": { backgroundColor: "rgba(99, 102, 241, 0.04) !important" },
+                      transition: "background-color 0.2s ease"
+                    }}
+                  >
+                    <TableCell sx={{ color: "text.secondary" }}>
+                      {isEditing ? (
+                        <TextField
+                          type="date"
+                          name="scheduleDate"
+                          value={formatDate(editedRow.scheduleDate)}
+                          onChange={handleChange}
+                          size="small"
+                        />
+                      ) : (
+                        formatDate(row.scheduleDate)
+                      )}
+                    </TableCell>
+                    <TableCell sx={{ color: "text.secondary" }}>
+                      {isEditing ? (
+                        <TextField
+                          type="time"
+                          name="scheduleStartTime"
+                          value={editedRow.scheduleStartTime}
+                          onChange={handleChange}
+                          size="small"
+                        />
+                      ) : (
+                        row.scheduleStartTime.substring(0, 5)
+                      )}
+                    </TableCell>
+                    <TableCell sx={{ color: "text.secondary" }}>{endTime}</TableCell>
+                    <TableCell sx={{ fontWeight: 600, color: "text.primary" }}>
+                      {isEditing ? (
+                        <TextField
+                          name="scheduleTopic"
+                          value={editedRow.scheduleTopic}
+                          onChange={handleChange}
+                          size="small"
+                        />
+                      ) : (
+                        row.scheduleTopic
+                      )}
+                    </TableCell>
+                    <TableCell sx={{ color: "text.secondary" }}>
+                      {isEditing ? (
+                        <TextField
+                          type="number"
+                          name="hourCount"
+                          value={editedRow.hourCount}
+                          onChange={handleChange}
+                          size="small"
+                          sx={{ width: 80 }}
+                        />
+                      ) : (
+                        row.hourCount
+                      )}
+                    </TableCell>
+                    <TableCell align="center">
+                      {isEditing ? (
+                        <Button 
+                          variant="contained" 
+                          color="success" 
+                          size="small"
+                          onClick={handleSaveClick}
+                          sx={{ borderRadius: "8px", textTransform: "none" }}
+                        >
+                          Save
+                        </Button>
+                      ) : (
+                        <Button 
+                          variant="outlined" 
+                          color="primary" 
+                          size="small"
+                          onClick={() => handleEditClick(row)}
+                          sx={{ borderRadius: "8px", textTransform: "none" }}
+                        >
+                          Edit
+                        </Button>
+                      )}
+                    </TableCell>
+                    <TableCell align="center">
+                      <Button 
+                        variant="outlined" 
+                        color="secondary" 
+                        size="small"
+                        onClick={() => deleteConformation(row.scheduleId)}
+                        sx={{ 
+                          borderRadius: "8px",
+                          textTransform: "none"
+                        }}
+                      >
+                        Delete
+                      </Button>
+                    </TableCell>
+                  </TableRow>
+                );
+              })
+            )}
           </TableBody>
         </Table>
       </TableContainer>

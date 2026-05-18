@@ -1,5 +1,4 @@
 import {
-  Button,
   Table,
   TableBody,
   TableCell,
@@ -7,7 +6,7 @@ import {
   TableHead,
   TableRow,
   Typography,
-  Paper,
+  Box,
 } from "@mui/material";
 import React, { useEffect, useState } from "react";
 import API from "../../Context/Axiox";
@@ -20,7 +19,6 @@ function AllDateReminders() {
     try {
       const response = await API.get("AllDatareminders");
       setDateReminders(response.data);
-      console.log(response.data);
     } catch (error) {
       console.error("Error fetching date reminders:", error);
     }
@@ -31,34 +29,59 @@ function AllDateReminders() {
   }, []);
 
   return (
-    <>
+    <Box className="page-enter" sx={{ px: { xs: 2, md: 4 } }}>
       <AdminSidebartab />
-      <TableContainer component={Paper} sx={{ mt: 4 }}>
-        <Typography variant="h5" align="center" gutterBottom m={5}>
-          <b>Date Reminders</b>
+      
+      <TableContainer className="glass-card" sx={{ mt: 4, overflow: "hidden" }}>
+        <Typography 
+          variant="h4" 
+          align="center" 
+          sx={{ 
+            mt: 4, 
+            mb: 3, 
+            fontFamily: "Outfit", 
+            fontWeight: 700,
+            background: "linear-gradient(45deg, #818cf8, #ec4899)",
+            WebkitBackgroundClip: "text",
+            WebkitTextFillColor: "transparent"
+          }}
+        >
+          Date Reminders 🗓️
         </Typography>
-        <Table sx={{ marginBottom:"10px"}}>
+        
+        <Table sx={{ minWidth: 650 }}>
           <TableHead>
             <TableRow>
-              <TableCell>Reminder Date</TableCell>
-              <TableCell>Reminder Time</TableCell>
-              <TableCell>Reminder Topic</TableCell>
+              <TableCell sx={{ fontWeight: 600 }}>Reminder Date</TableCell>
+              <TableCell sx={{ fontWeight: 600 }}>Reminder Time</TableCell>
+              <TableCell sx={{ fontWeight: 600 }}>Reminder Topic</TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
-            {dateReminders.map((reminder) => (
-              <TableRow key={reminder.dateReminderId}>
-                <TableCell>
-                  {new Date(reminder.reminderDate).toLocaleDateString()}
+            {dateReminders.length === 0 ? (
+              <TableRow>
+                <TableCell colSpan={3} align="center" sx={{ py: 4, color: "text.secondary" }}>
+                  No date reminders scheduled yet.
                 </TableCell>
-                <TableCell>{reminder.reminderTime}</TableCell>
-                <TableCell>{reminder.reminderTopic}</TableCell>
               </TableRow>
-            ))}
+            ) : (
+              dateReminders.map((reminder) => (
+                <TableRow 
+                  key={reminder.dateReminderId}
+                  sx={{ "&:hover": { backgroundColor: "rgba(99, 102, 241, 0.04)" }, transition: "background-color 0.2s" }}
+                >
+                  <TableCell sx={{ color: "text.secondary" }}>
+                    {new Date(reminder.reminderDate).toLocaleDateString()}
+                  </TableCell>
+                  <TableCell sx={{ color: "text.secondary" }}>{reminder.reminderTime}</TableCell>
+                  <TableCell sx={{ fontWeight: 500, color: "text.primary" }}>{reminder.reminderTopic}</TableCell>
+                </TableRow>
+              ))
+            )}
           </TableBody>
         </Table>
       </TableContainer>
-    </>
+    </Box>
   );
 }
 

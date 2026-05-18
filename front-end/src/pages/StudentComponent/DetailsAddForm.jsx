@@ -8,29 +8,16 @@ import {
   Typography,
   MenuItem,
   Button,
-  Input,
 } from "@mui/material";
 import API from "../../Context/Axiox";
-import { jwtDecode } from "jwt-decode";
+import { useSelector } from "react-redux";
 
 function DetailsAddForm() {
+  const { user } = useSelector((state) => state.auth);
   const [profile, setProfile] = useState("");
   const [gender, setGender] = useState("");
-  const [userEmail, setUserEmail] = useState("");
   const [birthday, setBirthday] = useState("");
   const [selectedFile, setSelectedFile] = useState(null);
-
-  useEffect(() => {
-    const fetchData = async () => {
-      const token = sessionStorage.getItem("studyBuddy");
-      if (token) {
-        const decode = jwtDecode(token);
-        const username = decode?.emails?.[0] || "";
-        setUserEmail(username);
-      }
-    };
-    fetchData();
-  }, []);
 
   const handleGenderChange = (e) => setGender(e.target.value);
   const handleFileChange = (e) => setSelectedFile(e.target.files[0]);
@@ -69,11 +56,10 @@ function DetailsAddForm() {
     }
 
     try {
-      // console.log(profile,gender,userEmail,birthday);
       await API.post("Addstudetails", {
         studentProfile: profile,
         studentGender: gender,
-        studentEmail: userEmail,
+        studentEmail: user?.email,
         studentBirthday: birthday,
       });
 
@@ -92,29 +78,117 @@ function DetailsAddForm() {
 
   return (
     <Box
-      sx={{ display: "flex", justifyContent: "center", alignItems: "center" }}
+      sx={{ display: "flex", justifyContent: "center", alignItems: "center", mt: 4, mb: 6 }}
     >
       <Box
+        className="glass-card page-enter"
         sx={{
-          width: "50%",
-          bgcolor: "white",
-          border: "2px solid black",
-          padding: "20px",
-          marginTop: "50px",
-          marginBottom: "50px",
+          width: "100%",
+          maxWidth: 600,
+          p: { xs: 3, md: 4 },
+          position: "relative",
+          overflow: "hidden"
         }}
       >
-        <Typography variant="h4" align="center" sx={{ marginBottom: "30px" }}>
-          <b>Add Your Details</b>
+        <Typography 
+          variant="h4" 
+          align="center" 
+          sx={{ 
+            mb: 4, 
+            fontFamily: "Outfit", 
+            fontWeight: 700,
+            background: "linear-gradient(45deg, #818cf8, #ec4899)",
+            WebkitBackgroundClip: "text",
+            WebkitTextFillColor: "transparent"
+          }}
+        >
+          Add Your Details
         </Typography>
 
         <form onSubmit={handleSubmit}>
-          <Input type="file" onChange={handleFileChange} />
-          <Button onClick={handleImageUpload} sx={{ mt: 1 }}>
-            Upload Image
-          </Button>
+          <Box 
+            sx={{ 
+              display: "flex", 
+              flexDirection: "column", 
+              alignItems: "center", 
+              mb: 3, 
+              p: 2.5,
+              borderRadius: "16px",
+              border: "2px dashed",
+              borderColor: "primary.main",
+              background: "rgba(99, 102, 241, 0.03)",
+              transition: "all 0.25s ease",
+              "&:hover": {
+                borderColor: "secondary.main",
+                boxShadow: "0 4px 12px rgba(99, 102, 241, 0.06)"
+              }
+            }}
+          >
+            {profile ? (
+              <Box 
+                component="img" 
+                src={profile} 
+                alt="Profile Preview"
+                sx={{ 
+                  width: 120, 
+                  height: 120, 
+                  borderRadius: "50%", 
+                  objectFit: "cover", 
+                  mb: 2,
+                  border: "3px solid #6366f1",
+                  boxShadow: "0 0 16px rgba(99, 102, 241, 0.4)"
+                }}
+              />
+            ) : (
+              <Box 
+                sx={{ 
+                  width: 100, 
+                  height: 100, 
+                  borderRadius: "50%", 
+                  background: "rgba(99, 102, 241, 0.05)", 
+                  display: "flex", 
+                  justifyContent: "center", 
+                  alignItems: "center",
+                  mb: 2,
+                  border: "1px solid rgba(99, 102, 241, 0.15)"
+                }}
+              >
+                <Typography variant="caption" sx={{ color: "text.secondary" }}>No Image</Typography>
+              </Box>
+            )}
 
-          <FormControl fullWidth margin="normal">
+            <Box sx={{ display: "flex", gap: 2, width: "100%", justifyContent: "center", mt: 1 }}>
+              <Button
+                variant="outlined"
+                component="label"
+                size="small"
+                sx={{ borderRadius: "8px", textTransform: "none" }}
+              >
+                Choose Photo
+                <input type="file" hidden onChange={handleFileChange} />
+              </Button>
+              <Button
+                variant="contained"
+                onClick={handleImageUpload}
+                disabled={!selectedFile}
+                size="small"
+                sx={{ 
+                  borderRadius: "8px",
+                  textTransform: "none",
+                  boxShadow: selectedFile ? "0 4px 12px rgba(99, 102, 241, 0.2)" : "none"
+                }}
+              >
+                Upload
+              </Button>
+            </Box>
+            {selectedFile && (
+              <Typography variant="caption" sx={{ mt: 1, color: "text.secondary", fontWeight: 500 }}>
+                Selected: {selectedFile.name}
+              </Typography>
+            )}
+          </Box>
+
+          <FormControl fullWidth margin="normal" sx={{ mb: 2 }}>
             <InputLabel id="genderID">Gender</InputLabel>
             <Select
               labelId="genderID"
@@ -133,17 +207,19 @@ function DetailsAddForm() {
             fullWidth
             margin="normal"
             onChange={(e) => setBirthday(e.target.value)}
+            InputLabelProps={{ shrink: true }}
+            sx={{ mb: 4 }}
           />
 
-          {profile && (
-            <Button
-              type="submit"
-              variant="outlined"
-              sx={{ float: "right", mt: 2 }}
-            >
-              Submit
-            </Button>
-          )}
+          <Button
+            type="submit"
+            className="glow-button"
+            fullWidth
+            size="large"
+            disabled={!profile}
+          >
+            Submit Details
+          </Button>
         </form>
       </Box>
     </Box>

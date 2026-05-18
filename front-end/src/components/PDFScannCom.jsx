@@ -1,25 +1,22 @@
 import React, { useEffect, useState } from "react";
 import { Typography, Box, Button } from "@mui/material";
 import DropboxChooser from "react-dropbox-chooser";
-import { jwtDecode } from "jwt-decode";
+import { useSelector } from "react-redux";
+import { useNavigate } from "react-router-dom";
 import { BsFileEarmarkPdf } from "react-icons/bs";
 import axios from "axios";
 
 function PDFScannCom() {
   const APP_KEY = "1muvw9nz1u5se1b";
   const [pdfUrl, setPdfUrl] = useState([]);
-  const [userEmail, setEmail] = useState("");
+  const navigate = useNavigate();
+  const { user, isAuthenticated } = useSelector((state) => state.auth);
 
   useEffect(() => {
-    const token = sessionStorage.getItem("studyBuddy");
-    if (!token) {
+    if (!isAuthenticated) {
       navigate("/");
-    } else {
-      const decode = jwtDecode(token);
-      const usermail = decode.emails[0];
-      setEmail(usermail);
     }
-  }, []);
+  }, [isAuthenticated, navigate]);
 
   const handleSuccess = (files) => {
     const pdfFile = files.find((file) => file.name.endsWith(".pdf"));
@@ -30,9 +27,9 @@ function PDFScannCom() {
     }
 
     try {
-      console.log(userEmail, pdfUrl);
+      console.log(user?.email, pdfUrl);
       const respond = axios.post(`http://127.0.0.1:8000/PdFChoose`, {
-        useremail: userEmail,
+        useremail: user?.email,
         url: pdfUrl,
       });
       alert(respond.data.message);
@@ -63,4 +60,4 @@ function PDFScannCom() {
   );
 }
 
-export default PDFScannCom;
+export default PDFScannCom;

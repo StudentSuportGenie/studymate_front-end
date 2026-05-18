@@ -27,6 +27,11 @@ function TimeScheduleAdded() {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
+    if (!studentDetails || !studentDetails.studentDetailsId) {
+      alert("Student profile details not found. Please fill in your details on the Home page first!");
+      return;
+    }
+
     const formattedTime =
       startTime.length === 5 ? `${startTime}:00` : startTime;
 
@@ -56,11 +61,33 @@ function TimeScheduleAdded() {
   };
 
   return (
-    <>
+    <Box className="page-enter" sx={{ px: { xs: 2, md: 4 } }}>
       <StudentSidetab />
-      <Box sx={{ maxWidth: 500, mx: "auto", mt: 4 , mb:5}}>
-        <Typography textAlign="center" variant="h5">
-          Add your Schedule
+      <Box 
+        className="glass-card"
+        sx={{ 
+          maxWidth: 600, 
+          mx: "auto", 
+          mt: 4, 
+          mb: 6, 
+          p: { xs: 3, md: 4 },
+          position: "relative",
+          overflow: "hidden"
+        }}
+      >
+        <Typography 
+          textAlign="center" 
+          variant="h4" 
+          sx={{ 
+            fontFamily: "Outfit", 
+            fontWeight: 700, 
+            mb: 3,
+            background: "linear-gradient(45deg, #818cf8, #ec4899)",
+            WebkitBackgroundClip: "text",
+            WebkitTextFillColor: "transparent"
+          }}
+        >
+          Add Your Schedule
         </Typography>
         <form onSubmit={handleSubmit}>
           <TextField
@@ -70,7 +97,9 @@ function TimeScheduleAdded() {
             value={date}
             onChange={(e) => setDate(e.target.value)}
             label="Date"
+            InputLabelProps={{ shrink: true }}
             required
+            sx={{ mb: 2 }}
           />
           <TextField
             type="time"
@@ -79,7 +108,9 @@ function TimeScheduleAdded() {
             value={startTime}
             onChange={(e) => setStartTime(e.target.value)}
             label="Start Time"
+            InputLabelProps={{ shrink: true }}
             required
+            sx={{ mb: 2 }}
           />
           <TextField
             fullWidth
@@ -89,6 +120,7 @@ function TimeScheduleAdded() {
             label="Content Topic"
             onChange={(e) => setContentTopic(e.target.value)}
             required
+            sx={{ mb: 2 }}
           />
           <TextField
             fullWidth
@@ -98,16 +130,22 @@ function TimeScheduleAdded() {
             label="Hour Count"
             onChange={(e) => setHourCount(e.target.value)}
             required
+            sx={{ mb: 3 }}
           />
-          <Button type="submit" variant="contained" sx={{ mt: 2 }}>
-            Submit
+          <Button 
+            type="submit" 
+            className="glow-button" 
+            fullWidth
+            size="large"
+          >
+            Submit Schedule
           </Button>
         </form>
       </Box>
-      <Box>
+      <Box sx={{ mt: 4 }}>
         <ViewAddedSchedule />
       </Box>
-    </>
+    </Box>
   );
 }
 

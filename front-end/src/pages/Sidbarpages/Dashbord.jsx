@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import ViewAllStudents from "../AdminComponenet/ViewAllStudents";
-import { jwtDecode } from "jwt-decode";
+import { useSelector } from "react-redux";
 import API from "../../Context/Axiox";
 import { useNavigate } from "react-router-dom";
 import { Typography, Box } from "@mui/material";
@@ -10,34 +10,21 @@ import StudentSidetab from "../../components/StudentSidetab";
 import AdminSidebartab from "../../components/AdminSidebartab";
 
 function Dashbord() {
-  const [role, setrole] = useState("");
-
-  useEffect(() => {
-    const token = sessionStorage.getItem("studyBuddy");
-    const decode = jwtDecode(token);
-    const Role = decode.jobTitle;
-    setrole(Role);
-  }, []);
-
   const navigate = useNavigate();
+  const { user, isAuthenticated } = useSelector((state) => state.auth);
 
   const [studetails, setstudetails] = useState(null);
-  const [name, setname] = useState("");
 
   const [dataddedform, setdataadded] = useState("none");
   const [dataEditform, setdataeditform] = useState("none");
 
   useEffect(() => {
-    const token = sessionStorage.getItem("studyBuddy");
-    if (!token) {
+    if (!isAuthenticated) {
       navigate("/");
     } else {
-      const decode = jwtDecode(token);
-      const studentname = decode.given_name;
-      setname(studentname);
       fetchstudentData();
     }
-  }, []);
+  }, [isAuthenticated, navigate]);
 
   const fetchstudentData = async () => {
     try {
@@ -60,18 +47,18 @@ function Dashbord() {
 
   return (
     <>
-      {role === "Admin" && (
+      {user?.role === "Admin" && (
         <>
           <AdminSidebartab />
           <ViewAllStudents />
         </>
       )}
 
-      {role === "Student" && (
+      {user?.role === "Student" && (
         <>
           <StudentSidetab />
           <Typography align="center" variant="h5" sx={{ mt: "20px" }}>
-            Welcome, {name}
+            Welcome, {user?.name}
           </Typography>
 
           <Box sx={{ display: dataddedform }}>
@@ -84,7 +71,7 @@ function Dashbord() {
         </>
       )}
 
-      {role && role !== "Admin" && role !== "Student" && (
+      {user?.role && user?.role !== "Admin" && user?.role !== "Student" && (
         <p>You do not have permission to view this page.</p>
       )}
     </>
@@ -92,3 +79,4 @@ function Dashbord() {
 }
 
 export default Dashbord;
+

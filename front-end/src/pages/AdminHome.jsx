@@ -3,25 +3,20 @@ import { Box } from '@mui/material'
 import ViewAllStudents from './AdminComponenet/ViewAllStudents'
 import AdminSidebartab from '../components/AdminSidebartab'
 
-
 function AdminHome() {
-
-  useEffect(()=>{
+  useEffect(() => {
     const token = sessionStorage.getItem("studyBuddy");
     console.log(token);
-  },[])
+  }, []);
+
   return (
-   <>
-      <AdminSidebartab/>
-      <Box sx={{
-        mt:"40px",
-        mb:"40px",
-        mx:"20px"
-      }}>
-         <ViewAllStudents/>
+    <Box className="page-enter" sx={{ px: { xs: 2, md: 4 } }}>
+      <AdminSidebartab />
+      <Box sx={{ mt: 4, mb: 4 }}>
+        <ViewAllStudents />
       </Box>
-   </>
-  )
+    </Box>
+  );
 }
 
-export default AdminHome
+export default AdminHome;

@@ -11,7 +11,7 @@ import {
 } from "@mui/material";
 import API from "../../Context/Axiox";
 
-function ViewKnowdgleItems() {
+function ViewKnowdgleItems({ showDelete = true }) {
   const [knowdgeData, setKnowdgleData] = useState([]);
 
   useEffect(() => {
@@ -22,7 +22,6 @@ function ViewKnowdgleItems() {
     try {
       const respond = await API.get(`getItems`);
       setKnowdgleData(respond.data);
-      console.log(respond.data);
     } catch (error) {
       console.log(error);
     }
@@ -31,7 +30,7 @@ function ViewKnowdgleItems() {
   const handelDelete = (knowdgleItemId) => {
     try {
       API.delete(`deleteItems?knowledgeItemID=${knowdgleItemId}`);
-      alert("Delete Successfuly");
+      alert("Deleted Successfully");
       window.location.reload();
     } catch (error) {
       if (error.response) {
@@ -54,42 +53,68 @@ function ViewKnowdgleItems() {
   };
 
   return (
-    <>
-      <Box sx={{ marginBottom: 5 , marginLeft:5, marginRight:5}}>
-        <TableContainer>
-          <Table>
-            <TableHead>
+    <Box sx={{ mb: 5 }}>
+      <TableContainer className="glass-card" sx={{ overflow: "hidden" }}>
+        <Table sx={{ minWidth: 650 }}>
+          <TableHead>
+            <TableRow>
+              <TableCell sx={{ fontWeight: 600 }}>Title</TableCell>
+              <TableCell sx={{ fontWeight: 600 }}>Description</TableCell>
+              <TableCell sx={{ fontWeight: 600 }}>Link</TableCell>
+              <TableCell sx={{ fontWeight: 600 }}>Type</TableCell>
+              <TableCell sx={{ fontWeight: 600 }}>Added By</TableCell>
+              {showDelete && <TableCell sx={{ fontWeight: 600 }} align="center">Action</TableCell>}
+            </TableRow>
+          </TableHead>
+          <TableBody>
+            {knowdgeData.length === 0 ? (
               <TableRow>
-                <TableCell>knowdgleItemTitle</TableCell>
-                <TableCell>knowdgleItemDescription</TableCell>
-                <TableCell>knowdgleitemLink</TableCell>
-                <TableCell>knowdgleItemtype</TableCell>
-                <TableCell>addedEmail</TableCell>
-                <TableCell>Action</TableCell>
+                <TableCell colSpan={showDelete ? 6 : 5} align="center" sx={{ py: 4, color: "text.secondary" }}>
+                  No knowledge items created yet.
+                </TableCell>
               </TableRow>
-            </TableHead>
-            <TableBody>
-              {knowdgeData.map((content) => (
-                <TableRow key={content.knowdgleItemId}>
-                  <TableCell>{content.knowdgleItemTitle}</TableCell>
-                  <TableCell>{content.knowdgleItemDescription}</TableCell>
-                  <TableCell>{content.knowdgleitemLink}</TableCell>
-                  <TableCell>{content.knowdgleItemtype}</TableCell>
-                  <TableCell>{content.addedEmail}</TableCell>
-                  <TableCell>
-                    <Button
-                      onClick={() => deleteConformation(content.knowdgleItemId)}
-                    >
-                      Delete
-                    </Button>
+            ) : (
+              knowdgeData.map((content) => (
+                <TableRow 
+                  key={content.knowdgleItemId}
+                  sx={{ "&:hover": { backgroundColor: "rgba(99, 102, 241, 0.04)" }, transition: "background-color 0.2s" }}
+                >
+                  <TableCell sx={{ fontWeight: 600, color: "text.primary" }}>{content.knowdgleItemTitle}</TableCell>
+                  <TableCell sx={{ color: "text.secondary", maxWidth: 250, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>
+                    {content.knowdgleItemDescription}
                   </TableCell>
+                  <TableCell sx={{ color: "primary.main" }}>
+                    {content.knowdgleitemLink ? (
+                      <a href={content.knowdgleitemLink} target="_blank" rel="noopener noreferrer" style={{ color: "inherit", textDecoration: "none" }}>
+                        View Link 🔗
+                      </a>
+                    ) : (
+                      "-"
+                    )}
+                  </TableCell>
+                  <TableCell sx={{ color: "text.secondary", textTransform: "uppercase", fontWeight: 500 }}>
+                    {content.knowdgleItemtype}
+                  </TableCell>
+                  <TableCell sx={{ color: "text.secondary" }}>{content.addedEmail}</TableCell>
+                  {showDelete && (
+                    <TableCell align="center">
+                      <Button
+                        variant="outlined"
+                        color="secondary"
+                        onClick={() => deleteConformation(content.knowdgleItemId)}
+                        sx={{ borderRadius: "8px", textTransform: "none", py: 0.5 }}
+                      >
+                        Delete
+                      </Button>
+                    </TableCell>
+                  )}
                 </TableRow>
-              ))}
-            </TableBody>
-          </Table>
-        </TableContainer>
-      </Box>
-    </>
+              ))
+            )}
+          </TableBody>
+        </Table>
+      </TableContainer>
+    </Box>
   );
 }
 

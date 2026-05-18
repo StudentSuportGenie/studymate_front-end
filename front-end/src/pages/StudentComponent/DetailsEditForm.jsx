@@ -105,92 +105,108 @@ function DetailsEditForm({ studentdetails }) {
   };
 
   return (
-    <>
+    <Box
+      sx={{ display: "flex", justifyContent: "center", alignItems: "center", mt: 4, mb: 6 }}
+    >
       <Box
+        className="glass-card page-enter"
         sx={{
-          m: "80px",
+          width: "100%",
+          maxWidth: 600,
+          p: { xs: 3, md: 4 },
+          position: "relative",
+          overflow: "hidden"
         }}
       >
-        <Typography align="center" variant="h6" gutterBottom>
-          Details Edit Form
-        </Typography>
-        <form
-          onSubmit={handleSubmit}
-          style={{
-            display: "flex",
-            flexDirection: "column",
-            alignItems: "center",
+        <Typography 
+          variant="h4" 
+          align="center" 
+          sx={{ 
+            mb: 4, 
+            fontFamily: "Outfit", 
+            fontWeight: 700,
+            background: "linear-gradient(45deg, #818cf8, #ec4899)",
+            WebkitBackgroundClip: "text",
+            WebkitTextFillColor: "transparent"
           }}
         >
-          <Box
-            sx={{
-              display: "flex",
-              flexDirection: "column",
-              alignItems: "flex-start",
-              padding: 2,
+          Edit Your Details
+        </Typography>
+
+        <form onSubmit={handleSubmit}>
+          <Box 
+            sx={{ 
+              display: "flex", 
+              flexDirection: "column", 
+              alignItems: "center", 
+              mb: 3, 
+              p: 2.5,
+              borderRadius: "16px",
+              border: "2px dashed",
+              borderColor: "primary.main",
+              background: "rgba(99, 102, 241, 0.03)",
+              transition: "all 0.25s ease",
+              "&:hover": {
+                borderColor: "secondary.main",
+                boxShadow: "0 4px 12px rgba(99, 102, 241, 0.06)"
+              }
             }}
           >
-            {(uploading || localPreview || profileEdit) && (
-              <Box
-                sx={{
-                  display: "flex",
-                  flexDirection: "column",
+            {uploading ? (
+              <Box sx={{ display: "flex", flexDirection: "column", alignItems: "center", p: 2 }}>
+                <CircularProgress size={40} color="primary" />
+                <Typography variant="body2" sx={{ mt: 2, color: "text.secondary", fontWeight: 500 }}>
+                  Uploading Profile...
+                </Typography>
+              </Box>
+            ) : profileEdit ? (
+              <Box 
+                component="img" 
+                src={profileEdit} 
+                alt="Profile Preview"
+                sx={{ 
+                  width: 120, 
+                  height: 120, 
+                  borderRadius: "50%", 
+                  objectFit: "cover", 
+                  mb: 2,
+                  border: "3px solid #6366f1",
+                  boxShadow: "0 0 16px rgba(99, 102, 241, 0.4)"
+                }}
+              />
+            ) : (
+              <Box 
+                sx={{ 
+                  width: 100, 
+                  height: 100, 
+                  borderRadius: "50%", 
+                  background: "rgba(99, 102, 241, 0.05)", 
+                  display: "flex", 
+                  justifyContent: "center", 
                   alignItems: "center",
+                  mb: 2,
+                  border: "1px solid rgba(99, 102, 241, 0.15)"
                 }}
               >
-                {uploading ? (
-                  <Box
-                    sx={{
-                      display: "flex",
-                      flexDirection: "column",
-                      alignItems: "center",
-                    }}
-                  >
-                    <CircularProgress size={32} />
-                    <Typography variant="body2" sx={{ mt: 1 }}>
-                      Uploading...
-                    </Typography>
-                    {localPreview && (
-                      <img
-                        src={localPreview}
-                        alt="Local Preview"
-                        style={{
-                          width: "120px",
-                          height: "120px",
-                          borderRadius: "50%",
-                          objectFit: "cover",
-                          marginTop: "8px",
-                          border: "2px solid black",
-                        }}
-                      />
-                    )}
-                  </Box>
-                ) : (
-                  profileEdit && (
-                    <img
-                      src={profileEdit}
-                      alt="Profile"
-                      style={{
-                        width: "120px",
-                        height: "120px",
-                        borderRadius: "50%",
-                        objectFit: "cover",
-                        marginBottom: "8px",
-                        
-                      }}
-                    />
-                  )
-                )}
+                <Typography variant="caption" sx={{ color: "text.secondary" }}>No Image</Typography>
               </Box>
             )}
 
-            <input
-              type="file"
-              accept="image/*"
-              
-              onChange={handleImageChange}
-              style={{ marginTop: "12px" }}
-            />
+            <Button
+              variant="outlined"
+              component="label"
+              size="small"
+              sx={{ borderRadius: "8px", mt: 1, textTransform: "none" }}
+              disabled={uploading}
+            >
+              Change Photo
+              <input 
+                type="file" 
+                hidden 
+                accept="image/*"
+                onChange={handleImageChange} 
+              />
+            </Button>
           </Box>
 
           <TextField
@@ -200,9 +216,11 @@ function DetailsEditForm({ studentdetails }) {
             margin="normal"
             value={editBirthday}
             onChange={(e) => setEditBirthday(e.target.value)}
+            InputLabelProps={{ shrink: true }}
+            sx={{ mb: 2 }}
           />
 
-          <FormControl fullWidth margin="normal">
+          <FormControl fullWidth margin="normal" sx={{ mb: 4 }}>
             <InputLabel id="GenderId">Gender</InputLabel>
             <Select
               labelId="GenderId"
@@ -217,16 +235,16 @@ function DetailsEditForm({ studentdetails }) {
 
           <Button
             type="submit"
-            variant="contained"
+            className="glow-button"
             fullWidth
-            sx={{ mt: 2 }}
+            size="large"
             disabled={uploading || !editBirthday || !editGender || !profileEdit}
           >
-            {uploading ? "Uploading..." : "Submit"}
+            {uploading ? "Uploading..." : "Save Changes"}
           </Button>
         </form>
       </Box>
-    </>
+    </Box>
   );
 }
 

@@ -1,18 +1,23 @@
 import React, { useEffect, useRef } from "react";
 import { Button } from "@mui/material";
 import { useMsal } from "@azure/msal-react";
+import { useDispatch } from "react-redux";
+import { logoutSuccess } from "../store/authSlice";
 
 function LogoutFunction() {
   const { instance } = useMsal();
+  const dispatch = useDispatch();
   const logoutTimer = useRef(null);
 
   // Function to perform logout
   const performLogout = () => {
+    dispatch(logoutSuccess());
     sessionStorage.clear();
     instance.logoutRedirect({
       postLogoutRedirectUri: "http://localhost:5173",
     });
   };
+
 
 
   const resetTimer = () => {

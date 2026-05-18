@@ -41,94 +41,147 @@ function About() {
   };
 
   return (
-    <Container maxWidth="lg" sx={{ py: 6 }}>
+    <Container maxWidth="lg" className="page-enter" sx={{ py: 6 }}>
       {/* Heading */}
       <Box textAlign="center" mb={5}>
-        <EmojiObjectsIcon color="warning" sx={{ fontSize: 60 }} />
-        <Typography variant="h4" gutterBottom>
+        <EmojiObjectsIcon sx={{ fontSize: 60, color: "#fbbf24", animation: "float 4s ease-in-out infinite" }} />
+        <Typography 
+          variant="h3" 
+          gutterBottom
+          sx={{
+            fontFamily: "Outfit",
+            fontWeight: 800,
+            background: "linear-gradient(45deg, #818cf8, #ec4899)",
+            WebkitBackgroundClip: "text",
+            WebkitTextFillColor: "transparent",
+            mb: 1
+          }}
+        >
           About AI StudyMate 🌟
         </Typography>
-        <Typography variant="subtitle1" color="text.secondary">
+        <Typography variant="h6" sx={{ fontFamily: "Outfit", fontWeight: 500, color: "text.secondary" }}>
           Smart tools made by smart students — for smart learning! 🧠💻
         </Typography>
       </Box>
 
       {/* Mission Section */}
       <Paper
-        elevation={4}
+        className="glass-card"
         sx={{
-          p: { xs: 3, sm: 4 },
+          p: { xs: 4, sm: 5 },
           mb: 6,
-          borderRadius: 3,
-          backgroundColor: "#f9f9f9",
+          position: "relative",
+          overflow: "hidden"
         }}
       >
-        <Typography variant="h5" gutterBottom>
+        <Typography 
+          variant="h4" 
+          gutterBottom
+          sx={{ 
+            fontFamily: "Outfit", 
+            fontWeight: 700,
+            background: "linear-gradient(45deg, #a5b4fc, #f472b6)",
+            WebkitBackgroundClip: "text",
+            WebkitTextFillColor: "transparent",
+            mb: 3
+          }}
+        >
           🎯 Our Mission
         </Typography>
-        <Typography color="text.secondary" paragraph>
+        <Typography variant="body1" sx={{ color: "text.secondary", paragraph: true, fontSize: "1.1rem" }}>
           At AI StudyMate, our mission is to revolutionize the way students learn,
           plan, and grow academically. 📚✨ We believe that with the right tools,
           every student can study smarter, not harder.
         </Typography>
-        <Typography color="text.secondary" paragraph>
+        <Typography variant="body1" sx={{ color: "text.secondary", paragraph: true, fontSize: "1.1rem" }}>
           We aim to build a digital companion that feels like a friend — one who
           keeps your calendar on track 🗓️, helps you focus better 🎯, and gives
           you helpful nudges so you can reach your goals stress-free 💆‍♀️.
         </Typography>
-        <Typography color="text.secondary">
+        <Typography variant="body1" sx={{ color: "text.secondary", fontSize: "1.1rem", fontWeight: 500 }}>
           Together, let’s make study time productive, organized, and even fun! 🚀🎉
         </Typography>
       </Paper>
 
-      <Divider sx={{ mb: 6 }} />
+      <Divider sx={{ mb: 6, opacity: 0.1 }} />
 
       {/* Team Section */}
-      <Typography variant="h5" align="center" gutterBottom>
+      <Typography 
+        variant="h4" 
+        align="center" 
+        gutterBottom
+        sx={{ fontFamily: "Outfit", fontWeight: 700, mb: 4 }}
+      >
         👨‍💻 Meet the Founders
       </Typography>
 
-      <Box textAlign="center" mb={3}>
-        <Button variant="contained" onClick={navigatetopage}>
-          Profile
+      <Box textAlign="center" mb={5}>
+        <Button 
+          variant="contained" 
+          className="glow-button"
+          onClick={navigatetopage}
+          size="large"
+        >
+          Profile Settings
         </Button>
       </Box>
 
-      {/* 👇 FIXED GRID LAYOUT */}
-      <Grid container spacing={4} justifyContent="center">
+      {/* 👇 PARALLEL SIDE-BY-SIDE LAYOUT */}
+      <Grid container spacing={4} justifyContent="center" alignItems="stretch">
         {team.map((member, index) => (
-          <Grid item xs={12} sm={6} md={6} lg={4} key={index}>
+          <Grid item xs={12} sm={6} md={5} key={index}>
             <Card
+              className="glass-card"
               sx={{
                 textAlign: "center",
-                borderRadius: 3,
-                p: 2,
-                boxShadow: 3,
+                p: { xs: 3, sm: 4 },
                 height: "100%",
+                display: "flex",
+                flexDirection: "column",
+                alignItems: "center",
+                justifyContent: "space-between",
+                transition: "transform 0.3s ease, box-shadow 0.3s ease",
+                "&:hover": {
+                  transform: "translateY(-4px)",
+                  boxShadow: "0 12px 40px rgba(99, 102, 241, 0.12)"
+                }
               }}
             >
-              <CardMedia
-                component="img"
-                image={member.image}
-                alt={member.name}
-                sx={{
-                  width: 160,
-                  height: 160,
-                  borderRadius: "50%",
-                  mx: "auto",
-                  mt: 2,
-                  objectFit: "cover",
-                }}
-              />
-              <CardContent>
-                <Typography variant="h6">{member.name}</Typography>
-                <Typography variant="subtitle2" color="text.secondary">
-                  {member.role}
-                </Typography>
-                <Typography variant="body2" color="text.secondary" mt={1}>
-                  {member.bio}
-                </Typography>
-              </CardContent>
+              <Box sx={{ display: "flex", flexDirection: "column", alignItems: "center" }}>
+                <CardMedia
+                  component="img"
+                  image={member.image}
+                  alt={member.name}
+                  sx={{
+                    width: 140,
+                    height: 140,
+                    borderRadius: "50%",
+                    mb: 3,
+                    objectFit: "cover",
+                    border: "3px solid rgba(99, 102, 241, 0.4)",
+                    boxShadow: "0 0 16px rgba(99, 102, 241, 0.2)"
+                  }}
+                />
+                <CardContent sx={{ p: 0 }}>
+                  <Typography variant="h5" sx={{ fontFamily: "Outfit", fontWeight: 700, mb: 0.5 }}>
+                    {member.name}
+                  </Typography>
+                  <Typography 
+                    variant="subtitle1" 
+                    sx={{ 
+                      fontFamily: "Outfit", 
+                      fontWeight: 600,
+                      color: "primary.main",
+                      mb: 2
+                    }}
+                  >
+                    {member.role}
+                  </Typography>
+                  <Typography variant="body1" sx={{ color: "text.secondary", fontSize: "1.02rem" }}>
+                    {member.bio}
+                  </Typography>
+                </CardContent>
+              </Box>
             </Card>
           </Grid>
         ))}

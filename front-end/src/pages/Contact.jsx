@@ -5,7 +5,6 @@ import {
   TextField,
   Button,
   Grid,
-  Paper,
   Box,
 } from "@mui/material";
 import ContactMailIcon from "@mui/icons-material/ContactMail";
@@ -44,28 +43,39 @@ function Contact() {
   };
 
   return (
-    <Container maxWidth="sm" sx={{ py: 6 }}>
-      <Paper elevation={4} sx={{ p: 4, borderRadius: 3 }}>
-        <Box textAlign="center" mb={3}>
-          <ContactMailIcon color="primary" sx={{ fontSize: 50 }} />
-          <Typography variant="h4" gutterBottom>
+    <Container maxWidth="sm" className="page-enter" sx={{ py: 6 }}>
+      <Box className="glass-card" sx={{ p: { xs: 3, md: 4 } }}>
+        <Box textAlign="center" mb={4}>
+          <ContactMailIcon sx={{ fontSize: 50, color: "primary.main", mb: 1, animation: "float 4s ease-in-out infinite" }} />
+          <Typography 
+            variant="h3" 
+            gutterBottom
+            sx={{
+              fontFamily: "Outfit",
+              fontWeight: 800,
+              background: "linear-gradient(45deg, #818cf8, #ec4899)",
+              WebkitBackgroundClip: "text",
+              WebkitTextFillColor: "transparent",
+              mb: 1
+            }}
+          >
             Contact Us 📬
           </Typography>
-          <Typography variant="subtitle1" color="text.secondary">
+          <Typography variant="body1" color="text.secondary">
             Have questions, feedback, or just want to say hi? We'd love to hear
             from you! 😊
           </Typography>
         </Box>
 
         <form ref={formRef} onSubmit={sendEmail}>
-          <Grid container spacing={3}>
+          <Grid container spacing={2.5}>
             <Grid item xs={12}>
               <TextField
                 label="Your Name"
                 fullWidth
                 required
                 variant="outlined"
-                name="Name" // Capital N
+                name="Name"
                 value={Name}
                 onChange={(e) => setName(e.target.value)}
               />
@@ -77,7 +87,7 @@ function Contact() {
                 required
                 variant="outlined"
                 type="email"
-                name="Email" // Capital E
+                name="Email"
                 value={Email}
                 onChange={(e) => setEmail(e.target.value)}
               />
@@ -88,7 +98,7 @@ function Contact() {
                 fullWidth
                 required
                 variant="outlined"
-                name="Subject" // Capital S
+                name="Subject"
                 value={Subject}
                 onChange={(e) => setSubject(e.target.value)}
               />
@@ -101,24 +111,24 @@ function Contact() {
                 fullWidth
                 required
                 variant="outlined"
-                name="message" // Lowercase m
+                name="message"
                 value={Message}
                 onChange={(e) => setMessage(e.target.value)}
               />
             </Grid>
-            <Grid item xs={12} textAlign="center">
+            <Grid item xs={12} textAlign="center" sx={{ mt: 1 }}>
               <Button
                 type="submit"
-                variant="contained"
+                className="glow-button"
+                fullWidth
                 size="large"
-                sx={{ px: 5, py: 1.5, borderRadius: 2 }}
               >
                 Send Message ✉️
               </Button>
             </Grid>
           </Grid>
         </form>
-      </Paper>
+      </Box>
     </Container>
   );
 }

@@ -1,28 +1,37 @@
 import React, { useEffect } from "react";
 import { Link } from "react-router-dom";
-import { AppBar, Toolbar, Typography, Button, Box, Stack } from "@mui/material";
+import { AppBar, Toolbar, Typography, Button, Box, Stack, IconButton } from "@mui/material";
 import { useMsal } from "@azure/msal-react";
+import { useDispatch, useSelector } from "react-redux";
+import { loginSuccess, logoutSuccess } from "../store/authSlice";
 import { loginRequest } from "../authConfig.jsx";
 import { jwtDecode } from "jwt-decode";
 import { useNavigate } from "react-router-dom";
+import { useThemeMode } from "../ThemeContext";
+import LightModeIcon from "@mui/icons-material/LightMode";
+import DarkModeIcon from "@mui/icons-material/DarkMode";
 
 function Navbar() {
   const { instance, accounts } = useMsal();
+  const dispatch = useDispatch();
   const navigate = useNavigate();
+  const { isAuthenticated, user } = useSelector((state) => state.auth);
+  const { mode, toggleThemeMode } = useThemeMode();
 
   const handleLogin = () => {
     instance.loginRedirect(loginRequest);
   };
 
   useEffect(() => {
-    if (accounts.length > 0) {
+    if (accounts.length > 0 && !isAuthenticated) {
       instance
         .acquireTokenSilent({
           ...loginRequest,
           account: accounts[0],
         })
         .then((response) => {
-          sessionStorage.setItem("studyBuddy", response.idToken);
+          // Dispatch login to Redux store
+          dispatch(loginSuccess(response.idToken));
 
           const decode = jwtDecode(response.idToken);
           const Role = decode.jobTitle;
@@ -36,9 +45,13 @@ function Navbar() {
           } else {
             navigate("/");
           }
+        })
+        .catch((error) => {
+          console.error("Silent token acquisition failed:", error);
         });
     }
-  }, [accounts, instance]);
+  }, [accounts, instance, isAuthenticated, dispatch, navigate]);
+
 
   return (
     <AppBar position="static" color="primary" sx={{ px: 2 }}>
@@ -59,7 +72,7 @@ function Navbar() {
         </Typography>
 
         {/* Navigation Links */}
-        <Stack direction="row" spacing={2}>
+        <Stack direction="row" spacing={2} alignItems="center">
           <Button
             component={Link}
             to="/"
@@ -84,27 +97,80 @@ function Navbar() {
           >
             Contact Us
           </Button>
-        </Stack>
 
-        {/* Login Button */}
-        <Box ml={3}>
-          <Button
-            onClick={handleLogin}
-            variant="contained"
-            color="secondary"
-            sx={{
-              textTransform: "none",
-              fontWeight: "bold",
-              borderRadius: "20px",
-              px: 3,
+          {/* Theme Mode Toggle Button */}
+          <IconButton 
+            onClick={toggleThemeMode} 
+            color="inherit" 
+            sx={{ 
+              ml: 1, 
+              transition: "transform 0.3s ease", 
+              "&:hover": { transform: "rotate(20deg) scale(1.1)" } 
             }}
           >
-            Login
-          </Button>
-        </Box>
+            {mode === "dark" ? (
+              <LightModeIcon sx={{ color: "#fbbf24" }} />
+            ) : (
+              <DarkModeIcon sx={{ color: "#ffffff" }} />
+            )}
+          </IconButton>
+        </Stack>
+
+        {/* Dynamic Auth Section */}
+        {isAuthenticated ? (
+          <Stack direction="row" spacing={2} alignItems="center" ml={3}>
+            <Typography variant="body2" sx={{ color: "white", fontWeight: "medium" }}>
+              Hi, {user?.name || "User"}
+            </Typography>
+            <Button
+              component={Link}
+              to={user?.role === "Admin" ? "/AdminHome" : "/StudentHome"}
+              variant="outlined"
+              color="inherit"
+              sx={{ textTransform: "none", borderRadius: "20px" }}
+            >
+              Dashboard
+            </Button>
+            <Button
+              onClick={() => {
+                dispatch(logoutSuccess());
+                instance.logoutRedirect({
+                  postLogoutRedirectUri: "http://localhost:5173",
+                });
+              }}
+              variant="contained"
+              color="secondary"
+              sx={{
+                textTransform: "none",
+                fontWeight: "bold",
+                borderRadius: "20px",
+                px: 3,
+              }}
+            >
+              Logout
+            </Button>
+          </Stack>
+        ) : (
+          <Box ml={3}>
+            <Button
+              onClick={handleLogin}
+              variant="contained"
+              color="secondary"
+              sx={{
+                textTransform: "none",
+                fontWeight: "bold",
+                borderRadius: "20px",
+                px: 3,
+              }}
+            >
+              Login
+            </Button>
+          </Box>
+        )}
       </Toolbar>
     </AppBar>
   );
 }
 
 export default Navbar;
+

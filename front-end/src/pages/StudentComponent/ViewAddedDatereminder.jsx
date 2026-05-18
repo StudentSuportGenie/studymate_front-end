@@ -39,7 +39,7 @@ function ViewAddedDatereminder() {
   useEffect(() => {
     const interval = setInterval(() => {
       checkForNotifications();
-    }, 30000); // ✅ check every 30 seconds
+    }, 30000); // check every 30 seconds
 
     return () => clearInterval(interval);
   }, [reminderDetails, triggeredIds]);
@@ -52,7 +52,6 @@ function ViewAddedDatereminder() {
         `${reminder.reminderDate}T${reminder.reminderTime}`
       );
 
-   
       const nowKey = `${now.getFullYear()}-${now.getMonth()}-${now.getDate()} ${now.getHours()}:${now.getMinutes()}`;
       const reminderKey = `${reminderDateTime.getFullYear()}-${reminderDateTime.getMonth()}-${reminderDateTime.getDate()} ${reminderDateTime.getHours()}:${reminderDateTime.getMinutes()}`;
 
@@ -83,7 +82,6 @@ function ViewAddedDatereminder() {
     try {
       const respond = await API.get(`getReminder`);
       setReminderDetails(respond.data);
-      console.log(respond.data);
     } catch (error) {
       console.log(error);
     }
@@ -102,7 +100,7 @@ function ViewAddedDatereminder() {
   const handleDelete = async (dateReminderId) => {
     try {
       await API.delete(`deleteReminder?dateReminderId=${dateReminderId}`);
-      alert("Delete Successfully");
+      alert("Deleted Successfully");
       window.location.reload();
     } catch (error) {
       if (error.response) {
@@ -125,53 +123,84 @@ function ViewAddedDatereminder() {
   };
 
   return (
-    <>
+    <Box sx={{ mb: 5 }}>
       {/* Hidden audio players */}
       {Object.entries(audioFiles).map(([name, file]) => (
         <audio key={name} ref={audioRefs[name]} src={file} />
       ))}
 
-      <Box sx={{ mt: 5, mb: 5 }}>
-        <Typography textAlign="center" variant="h6" sx={{ margin: "10px" }}>
-          Your Added Reminders
-        </Typography>
-        <TableContainer>
-          <Table>
-            <TableHead>
+      <Typography 
+        align="center" 
+        variant="h4" 
+        sx={{ 
+          mt: 4, 
+          mb: 3, 
+          fontFamily: "Outfit", 
+          fontWeight: 700,
+        }}
+      >
+        Your Active Reminders 🔔
+      </Typography>
+
+      <TableContainer className="glass-card" sx={{ overflow: "hidden" }}>
+        <Table sx={{ minWidth: 650 }}>
+          <TableHead>
+            <TableRow>
+              <TableCell sx={{ fontWeight: 600 }}>Date</TableCell>
+              <TableCell sx={{ fontWeight: 600 }}>Time</TableCell>
+              <TableCell sx={{ fontWeight: 600 }}>Topic</TableCell>
+              <TableCell sx={{ fontWeight: 600 }}>Ringtone</TableCell>
+              <TableCell sx={{ fontWeight: 600 }} align="center">Edit</TableCell>
+              <TableCell sx={{ fontWeight: 600 }} align="center">Action</TableCell>
+            </TableRow>
+          </TableHead>
+          <TableBody>
+            {reminderDetails.length === 0 ? (
               <TableRow>
-                <TableCell>Date</TableCell>
-                <TableCell>Time</TableCell>
-                <TableCell>Topic</TableCell>
-                <TableCell>Audio</TableCell>
-                <TableCell>Edit</TableCell>
-                <TableCell>Delete</TableCell>
+                <TableCell colSpan={6} align="center" sx={{ py: 4, color: "text.secondary" }}>
+                  No active reminders scheduled yet.
+                </TableCell>
               </TableRow>
-            </TableHead>
-            <TableBody>
-              {reminderDetails.map((reminder) => (
-                <TableRow key={reminder.dateReminderId}>
-                  <TableCell>{reminder.reminderDate?.split("T")[0]}</TableCell>
-                  <TableCell>{convertTo12Hour(reminder.reminderTime)}</TableCell>
-                  <TableCell>{reminder.reminderTopic}</TableCell>
-                  <TableCell>{reminder.ringingTone}</TableCell>
-                  <TableCell>
-                    <Button>Edit</Button>
+            ) : (
+              reminderDetails.map((reminder) => (
+                <TableRow 
+                  key={reminder.dateReminderId}
+                  sx={{ "&:hover": { backgroundColor: "rgba(99, 102, 241, 0.04)" }, transition: "background-color 0.2s" }}
+                >
+                  <TableCell sx={{ color: "text.secondary" }}>{reminder.reminderDate?.split("T")[0]}</TableCell>
+                  <TableCell sx={{ color: "text.secondary" }}>{convertTo12Hour(reminder.reminderTime)}</TableCell>
+                  <TableCell sx={{ fontWeight: 600, color: "text.primary" }}>{reminder.reminderTopic}</TableCell>
+                  <TableCell sx={{ color: "text.secondary", textTransform: "capitalize" }}>
+                    🎵 {reminder.ringingTone}
                   </TableCell>
-                  <TableCell>
+                  <TableCell align="center">
                     <Button
+                      variant="outlined"
+                      color="primary"
+                      size="small"
+                      sx={{ borderRadius: "8px", textTransform: "none" }}
+                    >
+                      Edit
+                    </Button>
+                  </TableCell>
+                  <TableCell align="center">
+                    <Button
+                      variant="outlined"
+                      color="secondary"
+                      size="small"
                       onClick={() => deleteConfirmation(reminder.dateReminderId)}
-                      sx={{ bgcolor: "red", color: "white" }}
+                      sx={{ borderRadius: "8px", textTransform: "none" }}
                     >
                       Delete
                     </Button>
                   </TableCell>
                 </TableRow>
-              ))}
-            </TableBody>
-          </Table>
-        </TableContainer>
-      </Box>
-    </>
+              ))
+            )}
+          </TableBody>
+        </Table>
+      </TableContainer>
+    </Box>
   );
 }
 

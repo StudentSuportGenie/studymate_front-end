@@ -1,32 +1,28 @@
 import React, { useEffect, useState } from "react";
 import DetailsAddForm from "./StudentComponent/DetailsAddForm";
 import { useNavigate } from "react-router-dom";
+import { useSelector } from "react-redux";
 import API from "../Context/Axiox";
-import { jwtDecode } from "jwt-decode";
 import { Typography, Box } from "@mui/material";
 import DetailsEditForm from "./StudentComponent/DetailsEditForm";
 import StudentSidetab from "../components/StudentSidetab";
 
 function StudentHome() {
   const navigate = useNavigate();
+  const { user, isAuthenticated } = useSelector((state) => state.auth);
 
   const [studetails, setstudetails] = useState(null);
-  const [name, setname] = useState("");
 
   const [dataddedform, setdataadded] = useState("none");
   const [dataEditform, setdataeditform] = useState("none");
 
   useEffect(() => {
-    const token = sessionStorage.getItem("studyBuddy");
-    if (!token) {
+    if (!isAuthenticated) {
       navigate("/");
     } else {
-      const decode = jwtDecode(token);
-      const studentname = decode.given_name;
-      setname(studentname);
       fetchstudentData();
     }
-  }, []);
+  }, [isAuthenticated, navigate]);
 
   const fetchstudentData = async () => {
     try {
@@ -48,10 +44,22 @@ function StudentHome() {
   }, [studetails]);
 
   return (
-    <>
+    <Box className="page-enter" sx={{ px: { xs: 2, md: 4 } }}>
       <StudentSidetab />
-      <Typography align="center" variant="h5" sx={{ mt: "20px" }}>
-       <b>Welcome, {name}</b>
+      <Typography 
+        align="center" 
+        variant="h3" 
+        sx={{ 
+          mt: 4, 
+          mb: 4, 
+          fontFamily: "Outfit", 
+          fontWeight: 800,
+          background: "linear-gradient(45deg, #818cf8, #ec4899)",
+          WebkitBackgroundClip: "text",
+          WebkitTextFillColor: "transparent"
+        }}
+      >
+        Welcome, {user?.name || "Student"}
       </Typography>
 
       <Box sx={{ display: dataddedform }}>
@@ -61,8 +69,9 @@ function StudentHome() {
       <Box sx={{ display: dataEditform }}>
         <DetailsEditForm studentdetails={studetails} />
       </Box>
-    </>
+    </Box>
   );
 }
 
 export default StudentHome;
+

@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Button } from "@mui/material";
+import { Button, Box, Typography, CardMedia, Fade } from "@mui/material";
 
 function ProfileSettings() {
   const [selectedFile, setSelectedFile] = useState(null);
@@ -29,59 +29,114 @@ function ProfileSettings() {
       );
       const data = await response.json();
       setImageUrl(data.secure_url);
-      console.log(imageUrl);
     } catch (error) {
       console.error("Upload failed:", error);
     }
   };
 
   return (
-    <div className="max-w-xl mx-auto p-6 bg-white shadow-md rounded-xl">
-      <h2 className="text-center text-3xl font-bold mb-6 text-gray-800">
-        Profile Image Upload
-      </h2>
-
-      <div className="border-2 border-dashed border-blue-500 rounded-lg h-48 flex items-center justify-center bg-gray-50 hover:shadow-md transition duration-300 relative cursor-pointer">
-        <input
-          type="file"
-          onChange={handleFileChange}
-          className="absolute inset-0 w-full h-full opacity-0 cursor-pointer"
-        />
-        <div className="text-center">
-          <img
-            src="https://img.icons8.com/dusk/64/000000/file.png"
-            alt="Upload Icon"
-            className="mx-auto mb-2"
-          />
-          <p className="text-gray-600 font-semibold">Click or drag a file</p>
-          <p className="text-gray-400 text-sm">Upload your profile picture</p>
-        </div>
-      </div>
-
-      <div className="flex justify-center mt-6">
-        <Button
-          variant="contained"
-          color="primary"
-          onClick={handleUpload}
-          className="text-white"
+    <Box className="page-enter" sx={{ display: "flex", justifyContent: "center", py: 8, px: 2 }}>
+      <Box className="glass-card" sx={{ p: { xs: 3, md: 5 }, width: "100%", maxWidth: 500, textAlign: "center" }}>
+        <Typography 
+          variant="h3" 
+          gutterBottom
+          sx={{
+            fontFamily: "Outfit",
+            fontWeight: 800,
+            background: "linear-gradient(45deg, #818cf8, #ec4899)",
+            WebkitBackgroundClip: "text",
+            WebkitTextFillColor: "transparent",
+            mb: 4
+          }}
         >
-          Upload
-        </Button>
-      </div>
+          Profile Photo 📸
+        </Typography>
 
-      {imageUrl && (
-        <div className="mt-8 text-center">
-          <h3 className="text-xl font-semibold mb-2 text-gray-700">
-            Uploaded Image
-          </h3>
-          <img
-            src={imageUrl}
-            alt="Uploaded"
-            className="mx-auto w-64 rounded-lg shadow-md"
+        {/* Drag and Drop Zone */}
+        <Box
+          sx={{
+            border: "2px dashed",
+            borderColor: "primary.main",
+            borderRadius: "16px",
+            py: 5,
+            px: 3,
+            cursor: "pointer",
+            position: "relative",
+            background: "rgba(99, 102, 241, 0.03)",
+            transition: "all 0.3s ease",
+            "&:hover": {
+              boxShadow: "0 8px 24px rgba(99, 102, 241, 0.08)",
+              borderColor: "secondary.main",
+              transform: "translateY(-2px)"
+            }
+          }}
+        >
+          <input
+            type="file"
+            onChange={handleFileChange}
+            style={{
+              position: "absolute",
+              top: 0,
+              left: 0,
+              width: "100%",
+              height: "100%",
+              opacity: 0,
+              cursor: "pointer",
+              zIndex: 2
+            }}
           />
-        </div>
-      )}
-    </div>
+          <Box>
+            <img
+              src="https://img.icons8.com/dusk/64/000000/file.png"
+              alt="Upload Icon"
+              style={{ margin: "0 auto 16px", width: 64, height: 64 }}
+            />
+            <Typography variant="h6" sx={{ fontFamily: "Outfit", fontWeight: 600, mb: 0.5 }}>
+              {selectedFile ? selectedFile.name : "Click or drag a file"}
+            </Typography>
+            <Typography variant="body2" color="text.secondary">
+              PNG, JPG or JPEG (Max 5MB)
+            </Typography>
+          </Box>
+        </Box>
+
+        <Box sx={{ mt: 4 }}>
+          <Button
+            variant="contained"
+            className="glow-button"
+            onClick={handleUpload}
+            fullWidth
+            size="large"
+          >
+            Upload Profile Picture
+          </Button>
+        </Box>
+
+        {imageUrl && (
+          <Fade in={Boolean(imageUrl)} timeout={400}>
+            <Box sx={{ mt: 5 }}>
+              <Typography variant="h6" sx={{ fontFamily: "Outfit", fontWeight: 600, mb: 2 }}>
+                Uploaded Image Preview ✨
+              </Typography>
+              <CardMedia
+                component="img"
+                image={imageUrl}
+                alt="Uploaded"
+                sx={{
+                  maxWidth: 240,
+                  mx: "auto",
+                  borderRadius: "50%",
+                  aspectRatio: "1/1",
+                  objectFit: "cover",
+                  border: "4px solid rgba(99, 102, 241, 0.4)",
+                  boxShadow: "0 0 24px rgba(99, 102, 241, 0.2)"
+                }}
+              />
+            </Box>
+          </Fade>
+        )}
+      </Box>
+    </Box>
   );
 }
 
