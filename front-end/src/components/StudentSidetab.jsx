@@ -31,33 +31,46 @@ function StudentSidetab() {
             Dashboard
           </NavItem>
 
-          <Divider orientation="vertical" flexItem sx={{ borderColor: "divider" }} />
+          <Divider
+            orientation="vertical"
+            flexItem
+            sx={{ borderColor: "divider" }}
+          />
 
           <NavItem to="/TimeScheduleAdded" icon={<ScheduleIcon />}>
             Time Schedule
           </NavItem>
 
-          <Divider orientation="vertical" flexItem sx={{ borderColor: "divider" }} />
+          <Divider
+            orientation="vertical"
+            flexItem
+            sx={{ borderColor: "divider" }}
+          />
 
           <NavItem to="/DateReminder" icon={<EventNoteIcon />}>
             Date Reminder
           </NavItem>
 
-          <Divider orientation="vertical" flexItem sx={{ borderColor: "divider" }} />
+          <Divider
+            orientation="vertical"
+            flexItem
+            sx={{ borderColor: "divider" }}
+          />
 
           <NavItem to="/StudentHelper" icon={<SchoolIcon />}>
             Student Helper
           </NavItem>
 
-          <Divider orientation="vertical" flexItem sx={{ borderColor: "divider" }} />
+          <Divider
+            orientation="vertical"
+            flexItem
+            sx={{ borderColor: "divider" }}
+          />
 
           <NavItem to="/StudentKnowdgleItems" icon={<MenuBookIcon />}>
             Knowledge Items
           </NavItem>
         </Stack>
-
-        {/* Logout */}
-        <LogoutFunction />
       </Stack>
     </Box>
   );
@@ -82,12 +95,16 @@ function NavItem({ to, icon, children }) {
         py: 1,
         borderRadius: "12px",
         background: isActive ? "rgba(99, 102, 241, 0.12)" : "transparent",
-        border: isActive ? "1px solid rgba(99, 102, 241, 0.25)" : "1px solid transparent",
+        border: isActive
+          ? "1px solid rgba(99, 102, 241, 0.25)"
+          : "1px solid transparent",
         boxShadow: isActive ? "0 4px 12px rgba(99, 102, 241, 0.08)" : "none",
         transition: "all 0.25s ease",
         "&:hover": {
           color: "primary.main",
-          backgroundColor: isActive ? "rgba(99, 102, 241, 0.2)" : "rgba(99, 102, 241, 0.05)",
+          backgroundColor: isActive
+            ? "rgba(99, 102, 241, 0.2)"
+            : "rgba(99, 102, 241, 0.05)",
           transform: "translateY(-1px)",
         },
       }}

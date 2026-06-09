@@ -6,6 +6,7 @@ import { MdOutlinePhotoSizeSelectActual } from "react-icons/md";
 import { FaCircleArrowUp } from "react-icons/fa6";
 import { useSelector } from "react-redux";
 import axios from "axios";
+import { API_BASE } from "../Config/api";
 import { useNavigate } from "react-router-dom";
 import StudentSidetab from "../components/StudentSidetab";
 
@@ -15,8 +16,33 @@ function OCRUploader() {
   const [question, setQuestion] = useState("");
   const [output, setOutput] = useState("");
   const [answerLoading, setAnswerLoading] = useState(false);
+  const [pdfLoading, setPdfLoading] = useState(false);
+  const [pdfLoaded, setPdfLoaded] = useState(false);
+  const [pdfName, setPdfName] = useState("");
+  const [pdfProgressText, setPdfProgressText] = useState("");
   const navigate = useNavigate();
   const { user, isAuthenticated } = useSelector((state) => state.auth);
+
+  const handlePdfUploadStart = (fileName) => {
+    setText(""); // Clear image OCR context when uploading a PDF
+    setPdfLoading(true);
+    setPdfLoaded(false);
+    setPdfName(fileName);
+    setPdfProgressText(`Uploading and analyzing "${fileName}"...`);
+  };
+
+  const handlePdfUploadSuccess = (fileName, message) => {
+    setPdfLoading(false);
+    setPdfLoaded(true);
+    setPdfName(fileName);
+  };
+
+  const handlePdfUploadError = (errorMessage) => {
+    setPdfLoading(false);
+    setPdfLoaded(false);
+    setPdfName("");
+    alert(`Failed to load PDF: ${errorMessage}`);
+  };
 
   useEffect(() => {
     if (!isAuthenticated) {
@@ -27,6 +53,8 @@ function OCRUploader() {
   const handleFileChange = (e) => {
     const file = e.target.files[0];
     if (file) {
+      setPdfLoaded(false); // Clear PDF context when uploading an image
+      setPdfName("");
       extractTextFromImage(file);
     }
   };
@@ -36,7 +64,7 @@ function OCRUploader() {
     if (!question && !text) return;
     setAnswerLoading(true);
     try {
-      const response = await axios.post(`http://127.0.0.1:8000/GetAnswer`, {
+      const response = await axios.post(`${API_BASE}/GetAnswer`, {
         useremail: user?.email,
         text: text,
         question: question,
@@ -45,7 +73,12 @@ function OCRUploader() {
       setOutput(response.data?.answer || "No answer found.");
     } catch (error) {
       console.error("API call failed:", error);
-      setOutput("Error retrieving answer.");
+      const backendError = error.response?.data?.detail || error.response?.data?.answer;
+      setOutput(
+        backendError
+          ? `Backend error: ${backendError}`
+          : "Error retrieving answer."
+      );
     } finally {
       setAnswerLoading(false);
     }
@@ -148,9 +181,7 @@ function OCRUploader() {
     <Box className="page-enter" sx={{ px: { xs: 2, md: 4 } }}>
       <StudentSidetab />
       
-      <Box sx={{ display: "flex", justifyContent: "flex-end", mt: 2, mb: 2 }}>
-        <PDFScannCom />
-      </Box>
+      <Box sx={{ mt: 4 }} />
 
       {/* Answer Output Panel */}
       <Box sx={{ display: "flex", justifyContent: "center", alignItems: "center", mb: 3 }}>
@@ -202,6 +233,76 @@ function OCRUploader() {
         </Paper>
       </Box>
 
+      {/* PDF Load Status Card */}
+      {(pdfLoading || pdfLoaded) && (
+        <Fade in={pdfLoading || pdfLoaded} timeout={400}>
+          <Paper
+            className="glass-card"
+            sx={{
+              p: 2,
+              mb: 2,
+              borderRadius: "16px",
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "space-between",
+              border: pdfLoaded ? "1px solid rgba(16, 185, 129, 0.3)" : "1px solid var(--glass-border)",
+              boxShadow: pdfLoaded ? "0 4px 20px rgba(16, 185, 129, 0.1)" : "var(--glass-shadow)",
+              animation: pdfLoading ? "pulseGlow 2s infinite" : "none",
+            }}
+          >
+            <Box sx={{ display: "flex", alignItems: "center", gap: 2 }}>
+              {pdfLoading ? (
+                <CircularProgress size={24} color="secondary" />
+              ) : (
+                <Box
+                  sx={{
+                    width: 36,
+                    height: 36,
+                    borderRadius: "50%",
+                    backgroundColor: "rgba(16, 185, 129, 0.1)",
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "center",
+                  }}
+                >
+                  <span style={{ fontSize: "18px" }}>📄</span>
+                </Box>
+              )}
+              <Box>
+                <Typography variant="subtitle2" sx={{ fontWeight: 700, fontFamily: "Outfit", color: "var(--text-primary)" }}>
+                  {pdfLoading ? "Processing Document..." : "Document Active"}
+                </Typography>
+                <Typography variant="body2" sx={{ color: "var(--text-secondary)", fontSize: "0.85rem" }}>
+                  {pdfLoading ? pdfProgressText : `Ready to ask questions about "${pdfName}"`}
+                </Typography>
+              </Box>
+            </Box>
+            {!pdfLoading && (
+              <Button
+                variant="text"
+                color="error"
+                size="small"
+                onClick={() => {
+                  setPdfLoaded(false);
+                  setPdfName("");
+                }}
+                sx={{ 
+                  borderRadius: "8px", 
+                  textTransform: "none", 
+                  fontFamily: "Outfit",
+                  fontWeight: 600,
+                  "&:hover": {
+                    backgroundColor: "rgba(239, 68, 68, 0.08)"
+                  }
+                }}
+              >
+                Clear Context
+              </Button>
+            )}
+          </Paper>
+        </Fade>
+      )}
+
       {/* Input Query form */}
       <Paper
         className="glass-card"
@@ -217,8 +318,15 @@ function OCRUploader() {
             variant="outlined"
             fullWidth
             value={question}
-            placeholder="Ask AI StudyMate a question about your study materials..."
+            placeholder={
+              pdfLoading
+                ? "Processing PDF document, please wait..."
+                : pdfLoaded
+                  ? `Ask AI StudyMate a question about "${pdfName}"...`
+                  : "Ask AI StudyMate a question about your study materials..."
+            }
             onChange={(e) => setQuestion(e.target.value)}
+            disabled={pdfLoading}
             sx={{ mb: 3 }}
           />
 
@@ -229,31 +337,42 @@ function OCRUploader() {
               alignItems: "center",
             }}
           >
-            <label htmlFor="image-upload">
-              <input
-                id="image-upload"
-                type="file"
-                accept="image/*"
-                onChange={handleFileChange}
-                style={{ display: "none" }}
+            <Box sx={{ display: "flex", gap: 2, alignItems: "center" }}>
+              <label htmlFor="image-upload">
+                <input
+                  id="image-upload"
+                  type="file"
+                  accept="image/*"
+                  onChange={handleFileChange}
+                  style={{ display: "none" }}
+                  disabled={pdfLoading || loading || answerLoading}
+                />
+                <Button 
+                  component="span" 
+                  variant="outlined"
+                  color="primary"
+                  sx={{ 
+                    borderRadius: "12px", 
+                    px: 3, 
+                    py: 1,
+                    display: "flex",
+                    alignItems: "center",
+                    gap: 1
+                  }}
+                  disabled={pdfLoading || loading || answerLoading}
+                >
+                  <MdOutlinePhotoSizeSelectActual size={20} />
+                  <Typography variant="body2">Upload Image</Typography>
+                </Button>
+              </label>
+
+              <PDFScannCom 
+                onUploadStart={handlePdfUploadStart}
+                onUploadSuccess={handlePdfUploadSuccess}
+                onUploadError={handlePdfUploadError}
+                disabled={pdfLoading || loading || answerLoading}
               />
-              <Button 
-                component="span" 
-                variant="outlined"
-                color="primary"
-                sx={{ 
-                  borderRadius: "12px", 
-                  px: 3, 
-                  py: 1,
-                  display: "flex",
-                  alignItems: "center",
-                  gap: 1
-                }}
-              >
-                <MdOutlinePhotoSizeSelectActual size={20} />
-                <Typography variant="body2">Upload Image</Typography>
-              </Button>
-            </label>
+            </Box>
 
             <IconButton 
               type="submit" 
@@ -265,7 +384,7 @@ function OCRUploader() {
                 boxShadow: "0 4px 14px rgba(99, 102, 241, 0.4)",
                 "&:hover": { transform: "scale(1.05)" }
               }}
-              disabled={answerLoading || loading}
+              disabled={answerLoading || loading || pdfLoading || (!question && !text)}
             >
               <FaCircleArrowUp size={24} style={{ color: "#ffffff" }} />
             </IconButton>
